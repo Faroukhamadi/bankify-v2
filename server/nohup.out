@@ -1,0 +1,8 @@
+118882:C 20 Jun 2022 22:42:38.374 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+118882:C 20 Jun 2022 22:42:38.374 # Redis version=7.0.1, bits=64, commit=00000000, modified=0, pid=118882, just started
+118882:C 20 Jun 2022 22:42:38.374 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf
+118882:M 20 Jun 2022 22:42:38.374 * monotonic clock: POSIX clock_gettime
+118882:M 20 Jun 2022 22:42:38.378 * Running mode=standalone, port=6379.
+118882:M 20 Jun 2022 22:42:38.378 # Server initialized
+118882:M 20 Jun 2022 22:42:38.378 * Ready to accept connections
+118882:M 20 Jun 2022 22:45:47.248 # Possible SECURITY ATTACK detected. It looks like somebody is sending POST or Host: commands to Redis. This is likely due to an attacker attempting to use Cross Protocol Scripting to compromise your Redis instance. Connection aborted.

@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Customer = void 0;
 const type_graphql_1 = require("type-graphql");
 const typeorm_1 = require("typeorm");
+const Account_1 = require("./Account");
 let Customer = class Customer extends typeorm_1.BaseEntity {
 };
 __decorate([
@@ -54,6 +55,21 @@ __decorate([
     (0, typeorm_1.Column)('character varying', { length: 8, unique: true }),
     __metadata("design:type", String)
 ], Customer.prototype, "phone", void 0);
+__decorate([
+    (0, typeorm_1.ManyToMany)(() => Account_1.Account, (account) => account.customers),
+    (0, typeorm_1.JoinTable)({
+        name: 'customer_account',
+        joinColumn: {
+            name: 'customer_id',
+            referencedColumnName: 'id',
+        },
+        inverseJoinColumn: {
+            name: 'account_id',
+            referencedColumnName: 'id',
+        },
+    }),
+    __metadata("design:type", Array)
+], Customer.prototype, "accounts", void 0);
 Customer = __decorate([
     (0, type_graphql_1.ObjectType)(),
     (0, typeorm_1.Entity)()

@@ -12,6 +12,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Account = void 0;
 const type_graphql_1 = require("type-graphql");
 const typeorm_1 = require("typeorm");
+const Customer_1 = require("./Customer");
+const Transaction_1 = require("./Transaction");
 let Account = class Account extends typeorm_1.BaseEntity {
 };
 __decorate([
@@ -44,6 +46,22 @@ __decorate([
     (0, typeorm_1.Column)('character varying', { length: 12 }),
     __metadata("design:type", String)
 ], Account.prototype, "accountNumber", void 0);
+__decorate([
+    (0, typeorm_1.ManyToMany)(() => Customer_1.Customer, (customer) => customer.accounts),
+    __metadata("design:type", Array)
+], Account.prototype, "customers", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => Transaction_1.Transaction, (transaction) => transaction.customerAccount),
+    __metadata("design:type", Array)
+], Account.prototype, "customerAccountTransactions", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => Transaction_1.Transaction, (transaction) => transaction.senderAccount),
+    __metadata("design:type", Array)
+], Account.prototype, "senderAccountTransactions", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => Transaction_1.Transaction, (transaction) => transaction.receiverAccount),
+    __metadata("design:type", Array)
+], Account.prototype, "receiverAccountTransactions", void 0);
 Account = __decorate([
     (0, type_graphql_1.ObjectType)(),
     (0, typeorm_1.Entity)()

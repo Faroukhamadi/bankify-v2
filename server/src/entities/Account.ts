@@ -6,10 +6,12 @@ import {
 	CreateDateColumn,
 	UpdateDateColumn,
 	BaseEntity,
-	OneToOne,
 	DeleteDateColumn,
+	ManyToMany,
+	OneToMany,
 } from 'typeorm';
 import { Customer } from './Customer';
+import { Transaction } from './Transaction';
 
 @ObjectType()
 @Entity()
@@ -39,7 +41,15 @@ export class Account extends BaseEntity {
 	@Column('character varying', { length: 12 })
 	accountNumber: string;
 
-	// @Field(() => Customer)
-	// @OneToOne(() => Customer, (customer) => customer.account)
-	// customer: Customer;
+	@ManyToMany(() => Customer, (customer) => customer.accounts)
+	customers: Customer[];
+
+	@OneToMany(() => Transaction, (transaction) => transaction.customerAccount)
+	customerAccountTransactions: Transaction[];
+
+	@OneToMany(() => Transaction, (transaction) => transaction.senderAccount)
+	senderAccountTransactions: Transaction[];
+
+	@OneToMany(() => Transaction, (transaction) => transaction.receiverAccount)
+	receiverAccountTransactions: Transaction[];
 }

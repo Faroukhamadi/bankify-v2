@@ -27,15 +27,15 @@ export class Transaction extends BaseEntity {
 	updatedAt: Date;
 
 	@Field(() => Account)
-	@ManyToOne(() => Account, (account) => account.accountTransactions)
-	account: Account;
+	@ManyToOne(() => Account, (account) => account.customerAccountTransactions)
+	customerAccount: Account;
 
 	@Field({ nullable: true })
 	@Column({ nullable: true })
-	accountId: number;
+	customerAccountId: number;
 
 	@Field(() => Account)
-	@ManyToOne(() => Account, (account) => account.senderTransactions)
+	@ManyToOne(() => Account, (account) => account.senderAccountTransactions)
 	senderAccount: Account;
 
 	@Field({ nullable: true })
@@ -43,7 +43,7 @@ export class Transaction extends BaseEntity {
 	senderAccountId: number;
 
 	@Field(() => Account)
-	@ManyToOne(() => Account, (account) => account.receiverTransactions)
+	@ManyToOne(() => Account, (account) => account.receiverAccountTransactions)
 	receiverAccount: Account;
 
 	@Field({ nullable: true })
@@ -51,7 +51,7 @@ export class Transaction extends BaseEntity {
 	receiverAccountId: number;
 
 	@Field(() => Teller)
-	@ManyToOne(() => Teller, (teller) => teller.receiverTransactions)
+	@ManyToOne(() => Teller, (teller) => teller.transactions)
 	teller: Teller;
 
 	@Field()

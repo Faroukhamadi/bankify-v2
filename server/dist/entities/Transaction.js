@@ -33,17 +33,17 @@ __decorate([
 ], Transaction.prototype, "updatedAt", void 0);
 __decorate([
     (0, type_graphql_1.Field)(() => Account_1.Account),
-    (0, typeorm_1.ManyToOne)(() => Account_1.Account, (account) => account.accountTransactions),
+    (0, typeorm_1.ManyToOne)(() => Account_1.Account, (account) => account.customerAccountTransactions),
     __metadata("design:type", Account_1.Account)
-], Transaction.prototype, "account", void 0);
+], Transaction.prototype, "customerAccount", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     (0, typeorm_1.Column)({ nullable: true }),
     __metadata("design:type", Number)
-], Transaction.prototype, "accountId", void 0);
+], Transaction.prototype, "customerAccountId", void 0);
 __decorate([
     (0, type_graphql_1.Field)(() => Account_1.Account),
-    (0, typeorm_1.ManyToOne)(() => Account_1.Account, (account) => account.senderTransactions),
+    (0, typeorm_1.ManyToOne)(() => Account_1.Account, (account) => account.senderAccountTransactions),
     __metadata("design:type", Account_1.Account)
 ], Transaction.prototype, "senderAccount", void 0);
 __decorate([
@@ -53,7 +53,7 @@ __decorate([
 ], Transaction.prototype, "senderAccountId", void 0);
 __decorate([
     (0, type_graphql_1.Field)(() => Account_1.Account),
-    (0, typeorm_1.ManyToOne)(() => Account_1.Account, (account) => account.receiverTransactions),
+    (0, typeorm_1.ManyToOne)(() => Account_1.Account, (account) => account.receiverAccountTransactions),
     __metadata("design:type", Account_1.Account)
 ], Transaction.prototype, "receiverAccount", void 0);
 __decorate([
@@ -63,7 +63,7 @@ __decorate([
 ], Transaction.prototype, "receiverAccountId", void 0);
 __decorate([
     (0, type_graphql_1.Field)(() => Teller_1.Teller),
-    (0, typeorm_1.ManyToOne)(() => Teller_1.Teller, (teller) => teller.receiverTransactions),
+    (0, typeorm_1.ManyToOne)(() => Teller_1.Teller, (teller) => teller.transactions),
     __metadata("design:type", Teller_1.Teller)
 ], Transaction.prototype, "teller", void 0);
 __decorate([

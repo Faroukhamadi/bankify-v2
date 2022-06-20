@@ -5,12 +5,11 @@ import {
 	CreateDateColumn,
 	DeleteDateColumn,
 	Entity,
-	JoinColumn,
 	OneToMany,
-	OneToOne,
 	PrimaryGeneratedColumn,
 	UpdateDateColumn,
 } from 'typeorm';
+import { Transaction } from './Transaction';
 
 enum TellerRole {
 	CUSTOMER = 'customer',
@@ -56,22 +55,6 @@ export class Teller extends BaseEntity {
 	@Column()
 	password!: string;
 
-	// TODO: add relations
-
-	// @Field(() => Account)
-	// @OneToOne(() => Account)
-	// @JoinColumn()
-	// account?: Account;
-
-	// @Column()
-	// password!: string;
-
-	// @OneToMany(() => Transaction, (transaction) => transaction.customer)
-	// customerTransactions: Transaction[];
-
-	// @OneToMany(() => Transaction, (transaction) => transaction.sender)
-	// senderTransactions: Transaction[];
-
-	// @OneToMany(() => Transaction, (transaction) => transaction.receiver)
-	// receiverTransactions: Transaction[];
+	@OneToMany(() => Transaction, (transaction) => transaction.teller)
+	transactions: Transaction[];
 }

@@ -5,12 +5,12 @@ import {
 	CreateDateColumn,
 	DeleteDateColumn,
 	Entity,
-	JoinColumn,
-	OneToMany,
-	OneToOne,
+	JoinTable,
+	ManyToMany,
 	PrimaryGeneratedColumn,
 	UpdateDateColumn,
 } from 'typeorm';
+import { Account } from './Account';
 
 @ObjectType()
 @Entity()
@@ -47,22 +47,17 @@ export class Customer extends BaseEntity {
 	@Column('character varying', { length: 8, unique: true })
 	phone: string;
 
-	// TODO: add relations
-
-	// @Field(() => Account)
-	// @OneToOne(() => Account)
-	// @JoinColumn()
-	// account?: Account;
-
-	// @Column()
-	// password!: string;
-
-	// @OneToMany(() => Transaction, (transaction) => transaction.customer)
-	// customerTransactions: Transaction[];
-
-	// @OneToMany(() => Transaction, (transaction) => transaction.sender)
-	// senderTransactions: Transaction[];
-
-	// @OneToMany(() => Transaction, (transaction) => transaction.receiver)
-	// receiverTransactions: Transaction[];
+	@ManyToMany(() => Account, (account) => account.customers)
+	@JoinTable({
+		name: 'customer_account',
+		joinColumn: {
+			name: 'customer_id',
+			referencedColumnName: 'id',
+		},
+		inverseJoinColumn: {
+			name: 'account_id',
+			referencedColumnName: 'id',
+		},
+	})
+	accounts: Account[];
 }
