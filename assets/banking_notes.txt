@@ -1,0 +1,11 @@
+Teller Roles:
+  customer:
+    privileges:
+      deposit
+      withdraw
+      transfer
+      list account's transactions
+  admin:
+    privileges:
+      create accounts
+      removing accounts
