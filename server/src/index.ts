@@ -14,8 +14,9 @@ import { Customer } from './entities/Customer';
 import { Account } from './entities/Account';
 import { Teller } from './entities/Teller';
 import { Transaction } from './entities/Transaction';
+import { HelloResolver } from './resolvers/hello';
 // only enable this if default playground doesn't work in front-end
-// import {ApolloServerPluginLandingPageGraphQLPlayground} from 'apollo-server-core'
+// import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core';
 
 declare module 'express-session' {
 	export interface SessionData {
@@ -24,8 +25,6 @@ declare module 'express-session' {
 }
 
 const main = async () => {
-	console.log('postgres password is: ', process.env.POSTGRES_DB_PASSWORD);
-
 	const myDataSource = new DataSource({
 		type: 'postgres',
 		database: process.env.POSTGRES_DB_NAME,
@@ -42,9 +41,11 @@ const main = async () => {
 	const RedisStore = connectRedis(session);
 	const redis = new Redis();
 
+	console.log('hello');
+
 	app.use(
 		cors({
-			origin: DEV_ORIGIN,
+			origin: [DEV_ORIGIN, 'https://studio.apollographql.com'],
 			credentials: true,
 		})
 	);
@@ -68,23 +69,33 @@ const main = async () => {
 		})
 	);
 
-	// const apolloServer = new ApolloServer({
-	// 	schema: await buildSchema({
-	// 		resolvers: [],
-	// 		validate: false,
-	// 	}),
-	// 	context: ({ req, res }): MyContext => ({
-	// 		req,
-	// 		res,
-	// 		redis,
-	// 		myDataSource,
-	// 	}),
-	// });
+	const apolloServer = new ApolloServer({
+		// plugins: [ApolloServerPluginLandingPageGraphQLPlayground],
+		schema: await buildSchema({
+			resolvers: [HelloResolver],
+			validate: false,
+		}),
+		context: ({ req, res }): MyContext => ({
+			req,
+			res,
+			redis,
+			myDataSource,
+		}),
+	});
 
-	// await apolloServer.start();
-	// apolloServer.applyMiddleware({
-	// 	app,
-	// 	cors: false,
+	await apolloServer.start();
+	apolloServer.applyMiddleware({
+		app,
+		cors: false,
+	});
+
+	// app.use((_, res) => {
+	// 	res.setHeader(
+	// 		'Access-Control-Allow-Origin',
+	// 		'https://studio.apollographql.com'
+	// 	);
+	// 	res.setHeader('Access-Control-Allow-Credentials', 'true');
+	// 	res.setHeader('Access-Control-Allow-Headers', ' Content-Type');
 	// });
 
 	app.listen(4000, () => {

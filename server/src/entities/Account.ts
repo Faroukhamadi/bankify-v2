@@ -32,7 +32,6 @@ export class Account extends BaseEntity {
 	@DeleteDateColumn()
 	deletedAt: Date;
 
-	// HACK: experimental
 	@Field(() => Float)
 	@Column('real', { default: 0 })
 	balance!: number;
