@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Teller = void 0;
 const type_graphql_1 = require("type-graphql");
 const typeorm_1 = require("typeorm");
-const Transaction_1 = require("./Transaction");
+const entity_1 = require("../transaction/entity");
 var TellerRole;
 (function (TellerRole) {
     TellerRole["CUSTOMER"] = "customer";
@@ -24,7 +24,7 @@ var TellerRole;
 let Teller = class Teller extends typeorm_1.BaseEntity {
 };
 __decorate([
-    (0, type_graphql_1.Field)(),
+    (0, type_graphql_1.Field)(() => type_graphql_1.ID),
     (0, typeorm_1.PrimaryGeneratedColumn)('increment'),
     __metadata("design:type", Number)
 ], Teller.prototype, "id", void 0);
@@ -63,7 +63,7 @@ __decorate([
     __metadata("design:type", String)
 ], Teller.prototype, "password", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => Transaction_1.Transaction, (transaction) => transaction.teller),
+    (0, typeorm_1.OneToMany)(() => entity_1.Transaction, (transaction) => transaction.teller),
     __metadata("design:type", Array)
 ], Teller.prototype, "transactions", void 0);
 Teller = __decorate([
@@ -71,4 +71,4 @@ Teller = __decorate([
     (0, typeorm_1.Entity)()
 ], Teller);
 exports.Teller = Teller;
-//# sourceMappingURL=Teller.js.map
+//# sourceMappingURL=entity.js.map

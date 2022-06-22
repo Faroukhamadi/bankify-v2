@@ -1,4 +1,4 @@
-import { ObjectType, Field, registerEnumType } from 'type-graphql';
+import { ObjectType, Field, registerEnumType, ID } from 'type-graphql';
 import {
 	BaseEntity,
 	Column,
@@ -9,7 +9,7 @@ import {
 	PrimaryGeneratedColumn,
 	UpdateDateColumn,
 } from 'typeorm';
-import { Transaction } from './Transaction';
+import { Transaction } from '../transaction/entity';
 
 enum TellerRole {
 	CUSTOMER = 'customer',
@@ -23,7 +23,7 @@ registerEnumType(TellerRole, {
 @ObjectType()
 @Entity()
 export class Teller extends BaseEntity {
-	@Field()
+	@Field(() => ID)
 	@PrimaryGeneratedColumn('increment')
 	id!: number;
 

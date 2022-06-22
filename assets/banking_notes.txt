@@ -9,3 +9,5 @@ Teller Roles:
     privileges:
       create accounts
       removing accounts
+  transaction:
+    prefix it so that I know the type

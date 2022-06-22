@@ -10,8 +10,8 @@ import {
 	ManyToMany,
 	OneToMany,
 } from 'typeorm';
-import { Customer } from './Customer';
-import { Transaction } from './Transaction';
+import { Customer } from '../customer/entity';
+import { Transaction } from '../transaction/entity';
 
 @ObjectType()
 @Entity()

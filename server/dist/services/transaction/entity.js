@@ -12,12 +12,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Transaction = void 0;
 const type_graphql_1 = require("type-graphql");
 const typeorm_1 = require("typeorm");
-const Account_1 = require("./Account");
-const Teller_1 = require("./Teller");
+const entity_1 = require("../account/entity");
+const entity_2 = require("../teller/entity");
 let Transaction = class Transaction extends typeorm_1.BaseEntity {
 };
 __decorate([
-    (0, type_graphql_1.Field)(),
+    (0, type_graphql_1.Field)(() => type_graphql_1.ID),
     (0, typeorm_1.PrimaryGeneratedColumn)('increment'),
     __metadata("design:type", Number)
 ], Transaction.prototype, "id", void 0);
@@ -32,9 +32,9 @@ __decorate([
     __metadata("design:type", Date)
 ], Transaction.prototype, "updatedAt", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(() => Account_1.Account),
-    (0, typeorm_1.ManyToOne)(() => Account_1.Account, (account) => account.customerAccountTransactions),
-    __metadata("design:type", Account_1.Account)
+    (0, type_graphql_1.Field)(() => entity_1.Account),
+    (0, typeorm_1.ManyToOne)(() => entity_1.Account, (account) => account.customerAccountTransactions),
+    __metadata("design:type", entity_1.Account)
 ], Transaction.prototype, "customerAccount", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
@@ -42,9 +42,9 @@ __decorate([
     __metadata("design:type", Number)
 ], Transaction.prototype, "customerAccountId", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(() => Account_1.Account),
-    (0, typeorm_1.ManyToOne)(() => Account_1.Account, (account) => account.senderAccountTransactions),
-    __metadata("design:type", Account_1.Account)
+    (0, type_graphql_1.Field)(() => entity_1.Account),
+    (0, typeorm_1.ManyToOne)(() => entity_1.Account, (account) => account.senderAccountTransactions),
+    __metadata("design:type", entity_1.Account)
 ], Transaction.prototype, "senderAccount", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
@@ -52,9 +52,9 @@ __decorate([
     __metadata("design:type", Number)
 ], Transaction.prototype, "senderAccountId", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(() => Account_1.Account),
-    (0, typeorm_1.ManyToOne)(() => Account_1.Account, (account) => account.receiverAccountTransactions),
-    __metadata("design:type", Account_1.Account)
+    (0, type_graphql_1.Field)(() => entity_1.Account),
+    (0, typeorm_1.ManyToOne)(() => entity_1.Account, (account) => account.receiverAccountTransactions),
+    __metadata("design:type", entity_1.Account)
 ], Transaction.prototype, "receiverAccount", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
@@ -62,9 +62,9 @@ __decorate([
     __metadata("design:type", Number)
 ], Transaction.prototype, "receiverAccountId", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(() => Teller_1.Teller),
-    (0, typeorm_1.ManyToOne)(() => Teller_1.Teller, (teller) => teller.transactions),
-    __metadata("design:type", Teller_1.Teller)
+    (0, type_graphql_1.Field)(() => entity_2.Teller),
+    (0, typeorm_1.ManyToOne)(() => entity_2.Teller, (teller) => teller.transactions),
+    __metadata("design:type", entity_2.Teller)
 ], Transaction.prototype, "teller", void 0);
 __decorate([
     (0, type_graphql_1.Field)(),
@@ -81,4 +81,4 @@ Transaction = __decorate([
     (0, typeorm_1.Entity)()
 ], Transaction);
 exports.Transaction = Transaction;
-//# sourceMappingURL=Transaction.js.map
+//# sourceMappingURL=entity.js.map

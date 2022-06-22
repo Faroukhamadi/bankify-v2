@@ -1,4 +1,4 @@
-import { ObjectType, Field } from 'type-graphql';
+import { ObjectType, Field, Directive, ID } from 'type-graphql';
 import {
 	BaseEntity,
 	Column,
@@ -10,12 +10,12 @@ import {
 	PrimaryGeneratedColumn,
 	UpdateDateColumn,
 } from 'typeorm';
-import { Account } from './Account';
+import { Account } from '../account/entity';
 
 @ObjectType()
 @Entity()
 export class Customer extends BaseEntity {
-	@Field()
+	@Field(() => ID)
 	@PrimaryGeneratedColumn('increment')
 	id!: number;
 

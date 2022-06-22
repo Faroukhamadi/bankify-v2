@@ -9,70 +9,62 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Customer = void 0;
+exports.Account = void 0;
 const type_graphql_1 = require("type-graphql");
 const typeorm_1 = require("typeorm");
-const Account_1 = require("./Account");
-let Customer = class Customer extends typeorm_1.BaseEntity {
+const entity_1 = require("../customer/entity");
+const entity_2 = require("../transaction/entity");
+let Account = class Account extends typeorm_1.BaseEntity {
 };
 __decorate([
-    (0, type_graphql_1.Field)(),
+    (0, type_graphql_1.Field)(() => type_graphql_1.ID),
     (0, typeorm_1.PrimaryGeneratedColumn)('increment'),
     __metadata("design:type", Number)
-], Customer.prototype, "id", void 0);
+], Account.prototype, "id", void 0);
 __decorate([
     (0, type_graphql_1.Field)(() => String),
     (0, typeorm_1.CreateDateColumn)(),
     __metadata("design:type", Date)
-], Customer.prototype, "createdAt", void 0);
+], Account.prototype, "createdAt", void 0);
 __decorate([
     (0, type_graphql_1.Field)(() => String),
     (0, typeorm_1.UpdateDateColumn)(),
     __metadata("design:type", Date)
-], Customer.prototype, "updatedAt", void 0);
+], Account.prototype, "updatedAt", void 0);
 __decorate([
     (0, type_graphql_1.Field)(() => String),
     (0, typeorm_1.DeleteDateColumn)(),
     __metadata("design:type", Date)
-], Customer.prototype, "deletedAt", void 0);
+], Account.prototype, "deletedAt", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(() => type_graphql_1.Float),
+    (0, typeorm_1.Column)('real', { default: 0 }),
+    __metadata("design:type", Number)
+], Account.prototype, "balance", void 0);
 __decorate([
     (0, type_graphql_1.Field)(() => String),
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.Column)('character varying', { length: 12 }),
     __metadata("design:type", String)
-], Customer.prototype, "firstName", void 0);
+], Account.prototype, "accountNumber", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(() => String),
-    (0, typeorm_1.Column)(),
-    __metadata("design:type", String)
-], Customer.prototype, "lastName", void 0);
-__decorate([
-    (0, type_graphql_1.Field)(() => String),
-    (0, typeorm_1.Column)('character varying', { length: 8, unique: true }),
-    __metadata("design:type", String)
-], Customer.prototype, "cin", void 0);
-__decorate([
-    (0, type_graphql_1.Field)(() => String),
-    (0, typeorm_1.Column)('character varying', { length: 8, unique: true }),
-    __metadata("design:type", String)
-], Customer.prototype, "phone", void 0);
-__decorate([
-    (0, typeorm_1.ManyToMany)(() => Account_1.Account, (account) => account.customers),
-    (0, typeorm_1.JoinTable)({
-        name: 'customer_account',
-        joinColumn: {
-            name: 'customer_id',
-            referencedColumnName: 'id',
-        },
-        inverseJoinColumn: {
-            name: 'account_id',
-            referencedColumnName: 'id',
-        },
-    }),
+    (0, typeorm_1.ManyToMany)(() => entity_1.Customer, (customer) => customer.accounts),
     __metadata("design:type", Array)
-], Customer.prototype, "accounts", void 0);
-Customer = __decorate([
+], Account.prototype, "customers", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => entity_2.Transaction, (transaction) => transaction.customerAccount),
+    __metadata("design:type", Array)
+], Account.prototype, "customerAccountTransactions", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => entity_2.Transaction, (transaction) => transaction.senderAccount),
+    __metadata("design:type", Array)
+], Account.prototype, "senderAccountTransactions", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => entity_2.Transaction, (transaction) => transaction.receiverAccount),
+    __metadata("design:type", Array)
+], Account.prototype, "receiverAccountTransactions", void 0);
+Account = __decorate([
     (0, type_graphql_1.ObjectType)(),
     (0, typeorm_1.Entity)()
-], Customer);
-exports.Customer = Customer;
-//# sourceMappingURL=Customer.js.map
+], Account);
+exports.Account = Account;
+//# sourceMappingURL=entity.js.map

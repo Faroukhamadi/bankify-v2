@@ -1,4 +1,4 @@
-import { ObjectType, Field, Float } from 'type-graphql';
+import { ObjectType, Field, Float, ID } from 'type-graphql';
 import {
 	BaseEntity,
 	Column,
@@ -8,13 +8,13 @@ import {
 	PrimaryGeneratedColumn,
 	UpdateDateColumn,
 } from 'typeorm';
-import { Account } from './Account';
-import { Teller } from './Teller';
+import { Account } from '../account/entity';
+import { Teller } from '../teller/entity';
 
 @ObjectType()
 @Entity()
 export class Transaction extends BaseEntity {
-	@Field()
+	@Field(() => ID)
 	@PrimaryGeneratedColumn('increment')
 	id: number;
 
