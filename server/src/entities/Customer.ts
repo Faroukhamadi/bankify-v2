@@ -27,8 +27,8 @@ export class Customer extends BaseEntity {
 	@UpdateDateColumn()
 	updatedAt: Date;
 
-	@Field(() => String)
-	@DeleteDateColumn()
+	@Field(() => String, { nullable: true })
+	@DeleteDateColumn({ nullable: true })
 	deletedAt: Date;
 
 	@Field(() => String)

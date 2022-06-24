@@ -19,6 +19,7 @@ const Account_1 = require("./entities/Account");
 const Teller_1 = require("./entities/Teller");
 const hello_1 = require("./resolvers/hello");
 const Transaction_1 = require("./entities/Transaction");
+const teller_1 = require("./resolvers/teller");
 const main = async () => {
     const myDataSource = new typeorm_1.DataSource({
         type: 'postgres',
@@ -55,7 +56,7 @@ const main = async () => {
     }));
     const apolloServer = new apollo_server_express_1.ApolloServer({
         schema: await (0, type_graphql_1.buildSchema)({
-            resolvers: [hello_1.HelloResolver],
+            resolvers: [hello_1.HelloResolver, teller_1.TellerResolver],
             validate: false,
         }),
         context: ({ req, res }) => ({

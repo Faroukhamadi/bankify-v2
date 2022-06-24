@@ -15,6 +15,7 @@ import { Account } from './entities/Account';
 import { Teller } from './entities/Teller';
 import { HelloResolver } from './resolvers/hello';
 import { Transaction } from './entities/Transaction';
+import { TellerResolver } from './resolvers/teller';
 
 declare module 'express-session' {
 	export interface SessionData {
@@ -66,10 +67,9 @@ const main = async () => {
 			},
 		})
 	);
-
 	const apolloServer = new ApolloServer({
 		schema: await buildSchema({
-			resolvers: [HelloResolver],
+			resolvers: [HelloResolver, TellerResolver],
 			validate: false,
 		}),
 		context: ({ req, res }): MyContext => ({

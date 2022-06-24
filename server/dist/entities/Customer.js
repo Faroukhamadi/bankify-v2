@@ -31,8 +31,8 @@ __decorate([
     __metadata("design:type", Date)
 ], Customer.prototype, "updatedAt", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(() => String),
-    (0, typeorm_1.DeleteDateColumn)(),
+    (0, type_graphql_1.Field)(() => String, { nullable: true }),
+    (0, typeorm_1.DeleteDateColumn)({ nullable: true }),
     __metadata("design:type", Date)
 ], Customer.prototype, "deletedAt", void 0);
 __decorate([
