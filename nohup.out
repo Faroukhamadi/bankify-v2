@@ -1,0 +1,7 @@
+600669:C 24 Jun 2022 02:33:29.022 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+600669:C 24 Jun 2022 02:33:29.023 # Redis version=7.0.1, bits=64, commit=00000000, modified=0, pid=600669, just started
+600669:C 24 Jun 2022 02:33:29.023 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf
+600669:M 24 Jun 2022 02:33:29.024 * monotonic clock: POSIX clock_gettime
+600669:M 24 Jun 2022 02:33:29.026 * Running mode=standalone, port=6379.
+600669:M 24 Jun 2022 02:33:29.026 # Server initialized
+600669:M 24 Jun 2022 02:33:29.027 * Ready to accept connections

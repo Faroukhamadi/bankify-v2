@@ -1,7 +1,15 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const apollo_server_1 = require("apollo-server");
-exports.default = (0, apollo_server_1.gql) `
+exports.typeDefs = void 0;
+const graphql_tag_1 = __importDefault(require("graphql-tag"));
+exports.typeDefs = (0, graphql_tag_1.default)(`
+	extend type Query {
+		me: Customer
+	}
+
 	type Customer @key(fields: "id") {
 		id: ID!
 		createdAt: String
@@ -12,9 +20,5 @@ exports.default = (0, apollo_server_1.gql) `
 		cin: String
 		phone: String
 	}
-
-	extend type Query {
-		me: Customer
-	}
-`;
+`);
 //# sourceMappingURL=typeDefs.js.map

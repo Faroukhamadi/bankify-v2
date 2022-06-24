@@ -1,4 +1,4 @@
-import { ObjectType, Field, Directive, ID } from 'type-graphql';
+import { ObjectType, Field, ID } from 'type-graphql';
 import {
 	BaseEntity,
 	Column,
@@ -10,7 +10,7 @@ import {
 	PrimaryGeneratedColumn,
 	UpdateDateColumn,
 } from 'typeorm';
-import { Account } from '../account/entity';
+import { Account } from './Account';
 
 @ObjectType()
 @Entity()

@@ -9,8 +9,7 @@ import {
 	PrimaryGeneratedColumn,
 	UpdateDateColumn,
 } from 'typeorm';
-import { Transaction } from '../transaction/entity';
-
+import { Transaction } from './Transaction';
 enum TellerRole {
 	CUSTOMER = 'customer',
 	ADMIN = 'admin',

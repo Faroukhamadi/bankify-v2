@@ -8,8 +8,8 @@ import {
 	PrimaryGeneratedColumn,
 	UpdateDateColumn,
 } from 'typeorm';
-import { Account } from '../account/entity';
-import { Teller } from '../teller/entity';
+import { Account } from './Account';
+import { Teller } from './Teller';
 
 @ObjectType()
 @Entity()
