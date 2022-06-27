@@ -30,7 +30,7 @@ const main = async () => {
 		username: process.env.POSTGRES_USERNAME,
 		password: process.env.POSTGRES_PASSWORD,
 		logging: 'all',
-		// synchronize: true,
+		synchronize: true,
 		entities: [Customer, Account, Teller, Transaction],
 	});
 	await myDataSource.initialize();

@@ -9,6 +9,7 @@ import {
 	DeleteDateColumn,
 	ManyToMany,
 	OneToMany,
+	ManyToOne,
 } from 'typeorm';
 import { Customer } from './Customer';
 import { Transaction } from './Transaction';
@@ -51,4 +52,7 @@ export class Account extends BaseEntity {
 
 	@OneToMany(() => Transaction, (transaction) => transaction.receiverAccount)
 	receiverAccountTransactions: Transaction[];
+
+	@ManyToOne(() => Customer, (customer) => customer.accounts)
+	customer: Customer;
 }

@@ -5,8 +5,7 @@ import {
 	CreateDateColumn,
 	DeleteDateColumn,
 	Entity,
-	JoinTable,
-	ManyToMany,
+	OneToMany,
 	PrimaryGeneratedColumn,
 	UpdateDateColumn,
 } from 'typeorm';
@@ -47,17 +46,6 @@ export class Customer extends BaseEntity {
 	@Column('character varying', { length: 8, unique: true })
 	phone: string;
 
-	@ManyToMany(() => Account, (account) => account.customers)
-	@JoinTable({
-		name: 'customer_account',
-		joinColumn: {
-			name: 'customer_id',
-			referencedColumnName: 'id',
-		},
-		inverseJoinColumn: {
-			name: 'account_id',
-			referencedColumnName: 'id',
-		},
-	})
+	@OneToMany(() => Account, (account) => account.customer)
 	accounts: Account[];
 }
