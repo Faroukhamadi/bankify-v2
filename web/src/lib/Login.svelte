@@ -1,7 +1,11 @@
 <script lang="ts">
 	import Textfield from '@smui/textfield';
 	import Button from '@smui/button';
-	let emailValue = '';
+	import client from '../_client';
+	import { LoginDocument, type LoginMutation } from '../generated/graphql';
+	import type { ApolloQueryResult } from '@apollo/client/core';
+
+	let usernameValue = '';
 	let passwordValue = '';
 </script>
 
@@ -13,7 +17,7 @@
 		<Textfield
 			style="min-width: 30rem;"
 			variant="outlined"
-			bind:value={emailValue}
+			bind:value={usernameValue}
 			label="Email Address"
 			required
 		/>

@@ -1,0 +1,16 @@
+mutation Login($password: String!, $username: String!) {
+	login(password: $password, username: $username) {
+		errors {
+			field
+			message
+		}
+		Teller {
+			id
+			createdAt
+			updatedAt
+			deletedAt
+			username
+			role
+		}
+	}
+}
