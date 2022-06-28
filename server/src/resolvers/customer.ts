@@ -1,6 +1,7 @@
-import { Account } from 'src/entities/Account';
-import { Customer } from 'src/entities/Customer';
-import { MyContext } from 'src/types';
+import { Account } from '../entities/Account';
+import { Customer } from '../entities/Customer';
+import { FieldError } from './teller';
+import { MyContext } from '../types';
 import {
 	Arg,
 	Ctx,
@@ -11,15 +12,6 @@ import {
 	Query,
 	Resolver,
 } from 'type-graphql';
-
-@ObjectType()
-export class FieldError {
-	@Field()
-	field?: string;
-
-	@Field()
-	message: string;
-}
 
 @ObjectType()
 class CustomerResponse {
@@ -49,13 +41,17 @@ export class CustomerInput {
 	@Field()
 	phone: string;
 	@Field()
-	account: Account;
+	accountNumber: string;
+	@Field()
+	balance: number;
 }
+
 @Resolver()
 export class CustomerResolver {
 	@Mutation(() => CustomerResponse)
 	async createCustomer(
-		@Arg('options') { firstName, lastName, cin, phone, account }: CustomerInput,
+		@Arg('options')
+		{ firstName, lastName, cin, phone, accountNumber, balance }: CustomerInput,
 		@Ctx() {}: MyContext
 	): Promise<CustomerResponse> {
 		const customer = Customer.create({
@@ -63,6 +59,10 @@ export class CustomerResolver {
 			lastName,
 			cin,
 			phone,
+		});
+		const account = Account.create({
+			accountNumber,
+			balance,
 		});
 
 		customer.accounts.push(account);

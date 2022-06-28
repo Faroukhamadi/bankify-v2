@@ -6,7 +6,7 @@
   "scripts": {
     "watch": "tsc -w",
     "dev": "nodemon dist/index.js",
-    "start-service-customer": "nodemon dist/services/customer/index.js",
+    "start-service-transaction": "nodemon dist/app.js",
     "start": "node dist/index.js"
   },
   "keywords": [],

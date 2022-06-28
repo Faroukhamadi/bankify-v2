@@ -20,6 +20,8 @@ const Teller_1 = require("./entities/Teller");
 const hello_1 = require("./resolvers/hello");
 const Transaction_1 = require("./entities/Transaction");
 const teller_1 = require("./resolvers/teller");
+const customer_1 = require("./resolvers/customer");
+const account_1 = require("./resolvers/account");
 const main = async () => {
     const myDataSource = new typeorm_1.DataSource({
         type: 'postgres',
@@ -27,6 +29,7 @@ const main = async () => {
         username: process.env.POSTGRES_USERNAME,
         password: process.env.POSTGRES_PASSWORD,
         logging: 'all',
+        synchronize: true,
         entities: [Customer_1.Customer, Account_1.Account, Teller_1.Teller, Transaction_1.Transaction],
     });
     await myDataSource.initialize();
@@ -56,7 +59,12 @@ const main = async () => {
     }));
     const apolloServer = new apollo_server_express_1.ApolloServer({
         schema: await (0, type_graphql_1.buildSchema)({
-            resolvers: [hello_1.HelloResolver, teller_1.TellerResolver],
+            resolvers: [
+                hello_1.HelloResolver,
+                teller_1.TellerResolver,
+                customer_1.CustomerResolver,
+                account_1.AccountResolver,
+            ],
             validate: false,
         }),
         context: ({ req, res }) => ({
@@ -72,7 +80,7 @@ const main = async () => {
         cors: false,
     });
     app.listen(4000, () => {
-        console.log('listening on port 4000');
+        console.log('graphql server listening on port 4000');
     });
 };
 main().catch((err) => console.log(err));

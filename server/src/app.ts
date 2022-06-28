@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import express from 'express';
 import { Request, Response } from 'express';
 import { DataSource } from 'typeorm';
@@ -20,6 +21,7 @@ const main = async () => {
 	await myDataSource.initialize();
 
 	const transactionRepository = myDataSource.getRepository(Transaction);
+	const tellerRepository = myDataSource.getRepository(Teller);
 
 	const app = express();
 	app.use(express.json());
@@ -29,6 +31,11 @@ const main = async () => {
 		res.json(transactions);
 	});
 
+	app.get('/tellers', async (req, res) => {
+		const tellers = await tellerRepository.find();
+		res.json(tellers);
+	});
+
 	app.get('/transactions/:id', async (req: Request, res: Response) => {
 		const transaction = await transactionRepository.findOneBy({
 			id: parseInt(req.params.id),
@@ -36,18 +43,22 @@ const main = async () => {
 		return res.send(transaction);
 	});
 
-	app.post('/transactions', (req: Request, res: Response) => {
+	app.post('/transactions', (_: Request, _r: Response) => {
 		// here we will have logic to save a user
 	});
 
-	app.put('/transactions/:id', (req: Request, res: Response) => {
+	app.put('/transactions/:id', (_: Request, _r: Response) => {
 		// here we will have logic to update a user by a given user id
 	});
 
-	app.delete('/transactions/:id', (req: Request, res: Response) => {
+	app.delete('/transactions/:id', (_: Request, _r: Response) => {
 		// here we will have logic to delete a user by a given user id
 	});
 
 	// start express server
-	app.listen(4001);
+	app.listen(4001, () => {
+		console.log('transaction service listening on port 4001');
+	});
 };
+
+main().catch((err) => console.log(err));

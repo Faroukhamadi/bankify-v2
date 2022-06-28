@@ -16,6 +16,8 @@ import { Teller } from './entities/Teller';
 import { HelloResolver } from './resolvers/hello';
 import { Transaction } from './entities/Transaction';
 import { TellerResolver } from './resolvers/teller';
+import { CustomerResolver } from './resolvers/customer';
+import { AccountResolver } from './resolvers/account';
 
 declare module 'express-session' {
 	export interface SessionData {
@@ -69,7 +71,12 @@ const main = async () => {
 	);
 	const apolloServer = new ApolloServer({
 		schema: await buildSchema({
-			resolvers: [HelloResolver, TellerResolver],
+			resolvers: [
+				HelloResolver,
+				TellerResolver,
+				CustomerResolver,
+				AccountResolver,
+			],
 			validate: false,
 		}),
 		context: ({ req, res }): MyContext => ({
@@ -87,7 +94,7 @@ const main = async () => {
 	});
 
 	app.listen(4000, () => {
-		console.log('listening on port 4000');
+		console.log('graphql server listening on port 4000');
 	});
 };
 

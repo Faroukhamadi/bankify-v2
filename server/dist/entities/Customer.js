@@ -56,18 +56,7 @@ __decorate([
     __metadata("design:type", String)
 ], Customer.prototype, "phone", void 0);
 __decorate([
-    (0, typeorm_1.ManyToMany)(() => Account_1.Account, (account) => account.customers),
-    (0, typeorm_1.JoinTable)({
-        name: 'customer_account',
-        joinColumn: {
-            name: 'customer_id',
-            referencedColumnName: 'id',
-        },
-        inverseJoinColumn: {
-            name: 'account_id',
-            referencedColumnName: 'id',
-        },
-    }),
+    (0, typeorm_1.OneToMany)(() => Account_1.Account, (account) => account.customer),
     __metadata("design:type", Array)
 ], Customer.prototype, "accounts", void 0);
 Customer = __decorate([

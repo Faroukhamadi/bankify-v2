@@ -60,7 +60,7 @@ let AccountResolver = class AccountResolver {
                 ],
             };
         }
-        if (customer.accounts) {
+        if (account.customers.length) {
             return {
                 errors: [
                     {

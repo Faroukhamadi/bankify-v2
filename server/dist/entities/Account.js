@@ -62,6 +62,10 @@ __decorate([
     (0, typeorm_1.OneToMany)(() => Transaction_1.Transaction, (transaction) => transaction.receiverAccount),
     __metadata("design:type", Array)
 ], Account.prototype, "receiverAccountTransactions", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(() => Customer_1.Customer, (customer) => customer.accounts),
+    __metadata("design:type", Customer_1.Customer)
+], Account.prototype, "customer", void 0);
 Account = __decorate([
     (0, type_graphql_1.ObjectType)(),
     (0, typeorm_1.Entity)()

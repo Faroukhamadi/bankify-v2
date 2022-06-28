@@ -1,5 +1,4 @@
 import { Customer } from '../entities/Customer';
-import argon2 from 'argon2';
 import {
 	Arg,
 	Ctx,
@@ -10,7 +9,6 @@ import {
 	Query,
 	Resolver,
 } from 'type-graphql';
-import { randomNumber } from '../utils/randomNumber';
 import { Account } from '../entities/Account';
 import { MyContext } from '../types';
 
@@ -35,7 +33,6 @@ class CredentialsResponse {
 @Resolver()
 export class AccountResolver {
 	@Mutation(() => CredentialsResponse, { nullable: false })
-	// createAccount
 	async createAccount(
 		@Arg('userId', () => Int) userId: number
 	): Promise<CredentialsResponse> {
@@ -58,7 +55,7 @@ export class AccountResolver {
 			};
 		}
 
-		if (customer.accounts) {
+		if (account.customers.length) {
 			return {
 				errors: [
 					{

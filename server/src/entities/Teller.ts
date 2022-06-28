@@ -51,7 +51,7 @@ export class Teller extends BaseEntity {
 	})
 	role: TellerRole;
 
-	@Column()
+	@Column({ select: false })
 	password!: string;
 
 	@OneToMany(() => Transaction, (transaction) => transaction.teller)
