@@ -21,7 +21,7 @@
 			style="min-width: 30rem;"
 			variant="outlined"
 			bind:value={passwordValue}
-			label="Filled"
+			label="Password"
 			required
 		/>
 		<Button style="min-width: 30rem;" variant="raised">SIGN IN</Button>
