@@ -68,6 +68,7 @@ const main = async () => {
 			},
 		})
 	);
+
 	const apolloServer = new ApolloServer({
 		plugins: [ApolloServerPluginLandingPageGraphQLPlayground()],
 		schema: await buildSchema({

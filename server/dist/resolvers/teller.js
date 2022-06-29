@@ -52,9 +52,6 @@ TellerResponse = __decorate([
 ], TellerResponse);
 let TellerResolver = class TellerResolver {
     me({ req }) {
-        console.log('we are inside me query');
-        console.log('this is req.session', req.session);
-        console.log('this is req.session.tellerId', req.session.tellerId);
         if (!req.session.tellerId) {
             return null;
         }
@@ -115,7 +112,6 @@ let TellerResolver = class TellerResolver {
             };
         }
         req.session.tellerId = teller.id;
-        console.log('req.session.tellerId', req.session);
         return {
             teller,
         };

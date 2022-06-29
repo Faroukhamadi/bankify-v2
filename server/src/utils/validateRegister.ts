@@ -19,14 +19,15 @@ export const validateRegister = (options: UsernamePasswordInput) => {
 			},
 		];
 	}
-	if (!PASSWORD_REGEX.test(options.password)) {
-		return [
-			{
-				field: 'password',
-				message:
-					'minimum 8 characters, at least 1 uppercase, 1 lower, 1 number and 1 special character',
-			},
-		];
-	}
+	// reset this in prod
+	// if (!PASSWORD_REGEX.test(options.password)) {
+	// 	return [
+	// 		{
+	// 			field: 'password',
+	// 			message:
+	// 				'minimum 8 characters, at least 1 uppercase, 1 lower, 1 number and 1 special character',
+	// 		},
+	// 	];
+	// }
 	return null;
 };

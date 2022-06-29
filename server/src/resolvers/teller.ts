@@ -37,16 +37,14 @@ class TellerResponse {
 export class TellerResolver {
 	@Query(() => Teller, { nullable: true })
 	me(@Ctx() { req }: MyContext) {
-		console.log('we are inside me query');
-		console.log('this is req.session', req.session);
-		console.log('this is req.session.tellerId', req.session.tellerId);
-
 		if (!req.session.tellerId) {
 			return null;
 		}
+
 		const teller = Teller.findOne({
 			where: { id: req.session.tellerId },
 		});
+
 		return teller;
 	}
 
@@ -114,7 +112,6 @@ export class TellerResolver {
 		}
 
 		req.session.tellerId = teller.id;
-		console.log('req.session.tellerId', req.session);
 
 		return {
 			teller,
