@@ -51,7 +51,9 @@ export class Teller extends BaseEntity {
 	})
 	role: TellerRole;
 
-	@Column({ select: false })
+	// this doesn't allow us to check against hashed password
+	// @Column({ select: false })
+	@Column()
 	password!: string;
 
 	@OneToMany(() => Transaction, (transaction) => transaction.teller)

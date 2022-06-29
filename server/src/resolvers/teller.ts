@@ -95,7 +95,15 @@ export class TellerResolver {
 				],
 			};
 		}
+		console.log('This is username: ', username);
+		console.log('This is password: ', password);
+
+		console.log('teller password: ', teller.password);
+		console.log('password: ', password);
+
 		const valid = await argon2.verify(teller.password, password);
+		console.log('valid:', valid);
+
 		if (!valid) {
 			return {
 				errors: [
@@ -108,6 +116,7 @@ export class TellerResolver {
 		}
 
 		req.session.tellerId = teller.id;
+		console.log('req.session.tellerId', req.session.tellerId);
 
 		return {
 			Teller: teller,

@@ -20,3 +20,8 @@
 34026:M 28 Jun 2022 17:29:03.942 * Running mode=standalone, port=6379.
 34026:M 28 Jun 2022 17:29:03.942 # Server initialized
 34026:M 28 Jun 2022 17:29:03.943 * Ready to accept connections
+34026:M 29 Jun 2022 02:18:56.401 * 1 changes in 3600 seconds. Saving...
+34026:M 29 Jun 2022 02:18:56.402 * Background saving started by pid 97410
+97410:C 29 Jun 2022 02:18:56.433 * DB saved on disk
+97410:C 29 Jun 2022 02:18:56.433 * Fork CoW for RDB: current 0 MB, peak 0 MB, average 0 MB
+34026:M 29 Jun 2022 02:18:56.503 * Background saving terminated with success

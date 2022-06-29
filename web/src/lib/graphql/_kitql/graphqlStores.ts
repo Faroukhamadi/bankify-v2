@@ -105,7 +105,7 @@ function KQL_HelloStore() {
 			if (policy !== 'network-only') {
 				// prettier-ignore
 				const cachedData = kitQLClient.requestCache<Types.HelloQuery, Types.HelloQueryVariables>({
-						variables, operationName, cacheMs,browser
+						variables, operationName, cacheMs, browser
 					});
 				if (cachedData) {
 					const result = { ...cachedData, isFetching: false, status: RequestStatus.DONE };

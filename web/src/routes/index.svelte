@@ -1,9 +1,8 @@
 <script lang="ts">
-	import { KQL_Hello, KQL_Login } from '$lib/graphql/_kitql/graphqlStores';
+	import { KQL_Hello } from '$lib/graphql/_kitql/graphqlStores';
+	import { browser } from '$app/env';
 
-	(async () => {
-		await KQL_Hello.query();
-	})();
+	$: browser && KQL_Hello.query();
 </script>
 
 {#if $KQL_Hello.isFetching}

@@ -59,7 +59,7 @@ __decorate([
     __metadata("design:type", String)
 ], Teller.prototype, "role", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ select: false }),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], Teller.prototype, "password", void 0);
 __decorate([
