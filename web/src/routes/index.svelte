@@ -1,15 +1,23 @@
 <script lang="ts">
-	import { KQL_Hello } from '$lib/graphql/_kitql/graphqlStores';
-	import { browser } from '$app/env';
+	import Search from '$lib/Search.svelte';
+	import Register from '$lib/Register.svelte';
+	import Tab, { Label } from '@smui/tab';
+	import TabBar from '@smui/tab-bar';
+	type NavState = 'Search' | 'Register';
 
-	$: browser && KQL_Hello.query();
+	let active: NavState = 'Search';
 </script>
 
-{#if $KQL_Hello.isFetching}
-	<h1>We are fetching still...</h1>
-{/if}
-<h1>{$KQL_Hello.data?.hello}</h1>
+<div>
+	<TabBar tabs={['Search', 'Register']} let:tab bind:active>
+		<Tab {tab}>
+			<Label>{tab}</Label>
+		</Tab>
+	</TabBar>
+</div>
 
-<h1 on:click={() => console.log('hello')}>click me also</h1>
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+{#if active === 'Search'}
+	<Search />
+{:else}
+	<Register />
+{/if}

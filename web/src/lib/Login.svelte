@@ -3,6 +3,7 @@
 	import Button from '@smui/button';
 	import HelperText from '@smui/textfield/helper-text';
 	import login from '$lib/login';
+	import { goto } from '$app/navigation';
 
 	interface Field {
 		invalid: boolean;
@@ -30,6 +31,9 @@
 	<form
 		on:submit|preventDefault={async () => {
 			[usernameField, passwordField] = await login(usernameField, passwordField);
+			if (!usernameField.invalid && !passwordField.invalid) {
+				goto('/');
+			}
 		}}
 	>
 		<Textfield

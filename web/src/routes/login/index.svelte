@@ -40,6 +40,3 @@
 {:else}
 	<About />
 {/if}
-
-<style>
-</style>
