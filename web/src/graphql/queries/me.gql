@@ -1,0 +1,10 @@
+query Me {
+	me {
+		id
+		createdAt
+		updatedAt
+		deletedAt
+		username
+		role
+	}
+}
