@@ -2,7 +2,8 @@
 	import Textfield from '@smui/textfield';
 	import Button from '@smui/button';
 	import HelperText from '@smui/textfield/helper-text';
-	import { KQL_Login } from '$lib/graphql/_kitql/graphqlStores';
+	import { KQL_Login, KQL_Me } from '$lib/graphql/_kitql/graphqlStores';
+	import { browser } from '$app/env';
 	import {} from '$lib/graphql/_kitql/graphqlTypes';
 
 	interface Field {
@@ -10,6 +11,8 @@
 		errorText: string;
 		content: string;
 	}
+
+	// $: browser && KQL_Me.query();
 
 	async function login(username: string, password: string) {
 		console.log('these are the values: ', username, password);
@@ -45,7 +48,13 @@
 	<h1>Bankify</h1>
 	<h2>Sign in</h2>
 
-	<form on:submit|preventDefault={() => login(usernameField.content, passwordField.content)}>
+	<form
+		on:submit|preventDefault={() => {
+			login(usernameField.content, passwordField.content);
+			KQL_Me.resetCache();
+			KQL_Me.query();
+		}}
+	>
 		<Textfield
 			style="min-width: 30rem;"
 			variant="outlined"
@@ -78,6 +87,8 @@
 			>SIGN IN</Button
 		>
 	</form>
+	<!-- <button on:click={() => console.log($KQL_Me.data)}>log teller</button> -->
+	<h1>{$KQL_Me.data?.me?.id}</h1>
 </main>
 
 <style>

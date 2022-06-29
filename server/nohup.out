@@ -25,3 +25,8 @@
 97410:C 29 Jun 2022 02:18:56.433 * DB saved on disk
 97410:C 29 Jun 2022 02:18:56.433 * Fork CoW for RDB: current 0 MB, peak 0 MB, average 0 MB
 34026:M 29 Jun 2022 02:18:56.503 * Background saving terminated with success
+34026:M 29 Jun 2022 03:18:57.054 * 1 changes in 3600 seconds. Saving...
+34026:M 29 Jun 2022 03:18:57.054 * Background saving started by pid 108553
+108553:C 29 Jun 2022 03:18:57.108 * DB saved on disk
+108553:C 29 Jun 2022 03:18:57.109 * Fork CoW for RDB: current 0 MB, peak 0 MB, average 0 MB
+34026:M 29 Jun 2022 03:18:57.155 * Background saving terminated with success

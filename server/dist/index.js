@@ -22,6 +22,7 @@ const Transaction_1 = require("./entities/Transaction");
 const teller_1 = require("./resolvers/teller");
 const customer_1 = require("./resolvers/customer");
 const account_1 = require("./resolvers/account");
+const apollo_server_core_1 = require("apollo-server-core");
 const main = async () => {
     const myDataSource = new typeorm_1.DataSource({
         type: 'postgres',
@@ -34,11 +35,10 @@ const main = async () => {
     });
     await myDataSource.initialize();
     const app = (0, express_1.default)();
-    console.log('database: ', myDataSource.driver.database);
     const RedisStore = (0, connect_redis_1.default)(express_session_1.default);
     const redis = new ioredis_1.default();
     app.use((0, cors_1.default)({
-        origin: [constants_1.DEV_ORIGIN, 'https://studio.apollographql.com'],
+        origin: constants_1.DEV_ORIGIN,
         credentials: true,
     }));
     app.use((0, express_session_1.default)({
@@ -47,7 +47,7 @@ const main = async () => {
             client: redis,
             disableTouch: true,
         }),
-        secret: process.env.COOKIE_SECRET,
+        secret: 'jeriojter',
         resave: false,
         saveUninitialized: false,
         cookie: {
@@ -58,6 +58,7 @@ const main = async () => {
         },
     }));
     const apolloServer = new apollo_server_express_1.ApolloServer({
+        plugins: [(0, apollo_server_core_1.ApolloServerPluginLandingPageGraphQLPlayground)()],
         schema: await (0, type_graphql_1.buildSchema)({
             resolvers: [
                 hello_1.HelloResolver,

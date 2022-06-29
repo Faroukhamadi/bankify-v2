@@ -44,7 +44,6 @@ export class Teller extends BaseEntity {
 
 	@Field(() => TellerRole)
 	@Column({
-		unique: true,
 		type: 'enum',
 		enum: TellerRole,
 		default: TellerRole.CUSTOMER,

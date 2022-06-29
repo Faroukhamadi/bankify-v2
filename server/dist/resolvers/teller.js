@@ -46,12 +46,15 @@ __decorate([
 __decorate([
     (0, type_graphql_1.Field)(() => Teller_1.Teller, { nullable: true }),
     __metadata("design:type", Teller_1.Teller)
-], TellerResponse.prototype, "Teller", void 0);
+], TellerResponse.prototype, "teller", void 0);
 TellerResponse = __decorate([
     (0, type_graphql_1.ObjectType)()
 ], TellerResponse);
 let TellerResolver = class TellerResolver {
     me({ req }) {
+        console.log('we are inside me query');
+        console.log('this is req.session', req.session);
+        console.log('this is req.session.tellerId', req.session.tellerId);
         if (!req.session.tellerId) {
             return null;
         }
@@ -86,7 +89,7 @@ let TellerResolver = class TellerResolver {
             }
         }
         req.session.tellerId = teller.id;
-        return { Teller: teller };
+        return { teller };
     }
     async login(username, password, { req }) {
         const teller = await Teller_1.Teller.findOne({ where: { username } });
@@ -100,12 +103,7 @@ let TellerResolver = class TellerResolver {
                 ],
             };
         }
-        console.log('This is username: ', username);
-        console.log('This is password: ', password);
-        console.log('teller password: ', teller.password);
-        console.log('password: ', password);
         const valid = await argon2_1.default.verify(teller.password, password);
-        console.log('valid:', valid);
         if (!valid) {
             return {
                 errors: [
@@ -117,9 +115,9 @@ let TellerResolver = class TellerResolver {
             };
         }
         req.session.tellerId = teller.id;
-        console.log('req.session.tellerId', req.session.tellerId);
+        console.log('req.session.tellerId', req.session);
         return {
-            Teller: teller,
+            teller,
         };
     }
     async Tellers({}) {

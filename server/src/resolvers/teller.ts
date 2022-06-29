@@ -30,13 +30,17 @@ class TellerResponse {
 	errors?: FieldError[];
 
 	@Field(() => Teller, { nullable: true })
-	Teller?: Teller;
+	teller?: Teller;
 }
 
 @Resolver()
 export class TellerResolver {
 	@Query(() => Teller, { nullable: true })
 	me(@Ctx() { req }: MyContext) {
+		console.log('we are inside me query');
+		console.log('this is req.session', req.session);
+		console.log('this is req.session.tellerId', req.session.tellerId);
+
 		if (!req.session.tellerId) {
 			return null;
 		}
@@ -75,7 +79,7 @@ export class TellerResolver {
 			}
 		}
 		req.session.tellerId = teller.id;
-		return { Teller: teller };
+		return { teller };
 	}
 
 	@Mutation(() => TellerResponse)
@@ -95,14 +99,8 @@ export class TellerResolver {
 				],
 			};
 		}
-		console.log('This is username: ', username);
-		console.log('This is password: ', password);
-
-		console.log('teller password: ', teller.password);
-		console.log('password: ', password);
 
 		const valid = await argon2.verify(teller.password, password);
-		console.log('valid:', valid);
 
 		if (!valid) {
 			return {
@@ -116,10 +114,10 @@ export class TellerResolver {
 		}
 
 		req.session.tellerId = teller.id;
-		console.log('req.session.tellerId', req.session.tellerId);
+		console.log('req.session.tellerId', req.session);
 
 		return {
-			Teller: teller,
+			teller,
 		};
 	}
 

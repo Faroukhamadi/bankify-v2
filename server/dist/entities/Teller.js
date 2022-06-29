@@ -51,7 +51,6 @@ __decorate([
 __decorate([
     (0, type_graphql_1.Field)(() => TellerRole),
     (0, typeorm_1.Column)({
-        unique: true,
         type: 'enum',
         enum: TellerRole,
         default: TellerRole.CUSTOMER,

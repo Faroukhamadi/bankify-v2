@@ -18,6 +18,7 @@ import { Transaction } from './entities/Transaction';
 import { TellerResolver } from './resolvers/teller';
 import { CustomerResolver } from './resolvers/customer';
 import { AccountResolver } from './resolvers/account';
+import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core';
 
 declare module 'express-session' {
 	export interface SessionData {
@@ -39,14 +40,12 @@ const main = async () => {
 
 	const app = express();
 
-	console.log('database: ', myDataSource.driver.database);
-
 	const RedisStore = connectRedis(session);
 	const redis = new Redis();
 
 	app.use(
 		cors({
-			origin: [DEV_ORIGIN, 'https://studio.apollographql.com'],
+			origin: DEV_ORIGIN,
 			credentials: true,
 		})
 	);
@@ -58,7 +57,7 @@ const main = async () => {
 				client: redis,
 				disableTouch: true,
 			}),
-			secret: process.env.COOKIE_SECRET as string,
+			secret: 'jeriojter',
 			resave: false,
 			saveUninitialized: false,
 			cookie: {
@@ -70,6 +69,7 @@ const main = async () => {
 		})
 	);
 	const apolloServer = new ApolloServer({
+		plugins: [ApolloServerPluginLandingPageGraphQLPlayground()],
 		schema: await buildSchema({
 			resolvers: [
 				HelloResolver,
