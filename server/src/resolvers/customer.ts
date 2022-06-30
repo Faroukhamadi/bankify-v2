@@ -128,7 +128,6 @@ export class CustomerResolver {
 				],
 			};
 		}
-		console.log(accountNumber.length);
 
 		const customer = Customer.create({
 			firstName,

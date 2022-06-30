@@ -4,25 +4,15 @@
 	import HelperText from '@smui/textfield/helper-text';
 	import login from '$lib/login';
 	import { goto } from '$app/navigation';
-	import type { Field } from './types';
+	import { INPUT_FIELD } from './constants';
 
-	let usernameField: Field = {
-		invalid: false,
-		errorText: '',
-		content: ''
-	};
-
-	let passwordField: Field = {
-		invalid: false,
-		errorText: '',
-		content: ''
-	};
+	let usernameField = { ...INPUT_FIELD };
+	let passwordField = { ...INPUT_FIELD };
 </script>
 
 <main>
 	<h1>Bankify</h1>
 	<h2>Sign in</h2>
-
 	<form
 		on:submit|preventDefault={async () => {
 			[usernameField, passwordField] = await login(usernameField, passwordField);

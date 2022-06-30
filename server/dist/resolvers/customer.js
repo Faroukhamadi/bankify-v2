@@ -141,7 +141,6 @@ let CustomerResolver = class CustomerResolver {
                 ],
             };
         }
-        console.log(accountNumber.length);
         const customer = Customer_1.Customer.create({
             firstName,
             lastName,

@@ -28,6 +28,55 @@ export function KQL__ResetAllCaches() {
 }
  
 /* Operations 👇 */
+function KQL_CreateCustomerStore() {
+	const operationName = 'KQL_CreateCustomer';
+	const operationType = ResponseResultType.Mutation;
+
+	// prettier-ignore
+	const { subscribe, set, update } = writable<RequestResult<Types.CreateCustomerMutation, Types.CreateCustomerMutationVariables>>({...defaultStoreValue, operationName, operationType});
+
+		async function mutateLocal(
+			params?: RequestParameters<Types.CreateCustomerMutationVariables>
+		): Promise<RequestResult<Types.CreateCustomerMutation, Types.CreateCustomerMutationVariables>> {
+			let { fetch, variables } = params ?? {};
+
+			const storedVariables = get(KQL_CreateCustomer).variables;
+			variables = variables ?? storedVariables;
+
+			update((c) => {
+				return { ...c, isFetching: true, status: RequestStatus.LOADING };
+			});
+
+			// prettier-ignore
+			const res = await kitQLClient.request<Types.CreateCustomerMutation, Types.CreateCustomerMutationVariables>({
+				skFetch: fetch,
+				document: Types.CreateCustomerDocument,
+				variables, 
+				operationName, 
+				operationType, 
+				browser
+			});
+			const result = { ...res, isFetching: false, status: RequestStatus.DONE, variables };
+			set(result);
+			return result;
+		}
+
+	return {
+		subscribe,
+
+		/**
+		 * Can be used for SSR, but simpler option is `.queryLoad`
+		 * @returns fill this store & the cache
+		 */
+		mutate: mutateLocal,
+
+	};
+}
+/**
+ * KitQL Svelte Store with the latest `CreateCustomer` Operation
+ */
+export const KQL_CreateCustomer = KQL_CreateCustomerStore();
+
 function KQL_LoginStore() {
 	const operationName = 'KQL_Login';
 	const operationType = ResponseResultType.Mutation;

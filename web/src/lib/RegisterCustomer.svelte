@@ -2,34 +2,42 @@
 	import Textfield from '@smui/textfield';
 	import Button from '@smui/button';
 	import HelperText from '@smui/textfield/helper-text';
+	import { INPUT_FIELD } from '$lib/constants';
+	import registerCustomer from './registerCustomer';
+	import type { Field } from './types';
 	import { goto } from '$app/navigation';
-	import { DEFAULT_FIELD } from '$lib/constants';
 
-	let firstNameField = { ...DEFAULT_FIELD };
-	let lastNameField = { ...DEFAULT_FIELD };
-	let CINField = { ...DEFAULT_FIELD };
-	let phoneField = { ...DEFAULT_FIELD };
-	let accountNumberField = { ...DEFAULT_FIELD };
+	let firstNameField = { ...INPUT_FIELD };
+	let lastNameField = { ...INPUT_FIELD };
+	let CINField = { ...INPUT_FIELD };
+	let phoneField = { ...INPUT_FIELD };
+	let accountNumberField = { ...INPUT_FIELD };
+	let fields: Field[] = [];
 </script>
-
-<!-- fields are firstName, lastName, CIN, phone, accountNumber -->
 
 <main>
 	<h1>Register Customer</h1>
 	<form
 		on:submit|preventDefault={async () => {
-			// [usernameField, passwordField] = await login(usernameField, passwordField);
-			// if (!usernameField.invalid && !passwordField.invalid) {
-			// 	goto('/');
-			// }
-			console.log(
-				'These are all the values: ',
-				firstNameField.content,
-				lastNameField.content,
-				CINField.content,
-				phoneField.content,
-				accountNumberField.content
-			);
+			[firstNameField, lastNameField, CINField, phoneField, accountNumberField] = fields =
+				await registerCustomer(
+					firstNameField,
+					lastNameField,
+					CINField,
+					phoneField,
+					accountNumberField
+				);
+			let allValid = true;
+			fields.forEach((field) => {
+				if (field.invalid) {
+					allValid = false;
+				}
+			});
+			if (allValid) {
+				for (const field of fields) {
+					field.content = '';
+				}
+			}
 		}}
 	>
 		<Textfield

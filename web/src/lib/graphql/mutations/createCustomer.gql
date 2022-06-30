@@ -1,0 +1,15 @@
+mutation CreateCustomer($options: CustomerInput!) {
+	createCustomer(options: $options) {
+		errors {
+			field
+			message
+		}
+		customer {
+			id
+			firstName
+			lastName
+			cin
+			phone
+		}
+	}
+}

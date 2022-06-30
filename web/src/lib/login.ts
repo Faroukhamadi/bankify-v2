@@ -1,10 +1,5 @@
 import { KQL_Login } from './graphql/_kitql/graphqlStores';
-
-interface Field {
-	invalid: boolean;
-	errorText: string;
-	content: string;
-}
+import type { Field } from '$lib/types';
 
 export default async function (usernameField: Field, passwordField: Field) {
 	const result = await KQL_Login.mutate({
