@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Search from '$lib/Search.svelte';
-	import Register from '$lib/Register.svelte';
+	import Register from '$lib/RegisterCustomer.svelte';
 	import Tab, { Label } from '@smui/tab';
 	import TabBar from '@smui/tab-bar';
 	type NavState = 'Search' | 'Register';

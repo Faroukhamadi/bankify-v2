@@ -47,10 +47,6 @@ __decorate([
     __metadata("design:type", String)
 ], Account.prototype, "accountNumber", void 0);
 __decorate([
-    (0, typeorm_1.ManyToMany)(() => Customer_1.Customer, (customer) => customer.accounts),
-    __metadata("design:type", Array)
-], Account.prototype, "customers", void 0);
-__decorate([
     (0, typeorm_1.OneToMany)(() => Transaction_1.Transaction, (transaction) => transaction.customerAccount),
     __metadata("design:type", Array)
 ], Account.prototype, "customerAccountTransactions", void 0);
@@ -63,6 +59,7 @@ __decorate([
     __metadata("design:type", Array)
 ], Account.prototype, "receiverAccountTransactions", void 0);
 __decorate([
+    (0, type_graphql_1.Field)(() => Customer_1.Customer),
     (0, typeorm_1.ManyToOne)(() => Customer_1.Customer, (customer) => customer.accounts),
     __metadata("design:type", Customer_1.Customer)
 ], Account.prototype, "customer", void 0);

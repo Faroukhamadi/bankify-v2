@@ -55,7 +55,7 @@ export class AccountResolver {
 			};
 		}
 
-		if (account.customers.length) {
+		if (account.customer) {
 			return {
 				errors: [
 					{
@@ -77,7 +77,7 @@ export class AccountResolver {
 			};
 		}
 
-		account.customers.push(customer);
+		account.customer;
 
 		await account.save();
 		return {
@@ -93,7 +93,7 @@ export class AccountResolver {
 	) {
 		const account = await Account.findOne({
 			where: {
-				customers: {
+				customer: {
 					id: userId,
 				},
 			},
@@ -108,7 +108,7 @@ export class AccountResolver {
 	async accounts(@Ctx() {}: MyContext): Promise<Account[]> {
 		return Account.find({
 			relations: {
-				customers: true,
+				customer: true,
 			},
 		});
 	}

@@ -7,7 +7,6 @@ import {
 	UpdateDateColumn,
 	BaseEntity,
 	DeleteDateColumn,
-	ManyToMany,
 	OneToMany,
 	ManyToOne,
 } from 'typeorm';
@@ -41,9 +40,6 @@ export class Account extends BaseEntity {
 	@Column('character varying', { length: 12 })
 	accountNumber: string;
 
-	@ManyToMany(() => Customer, (customer) => customer.accounts)
-	customers: Customer[];
-
 	@OneToMany(() => Transaction, (transaction) => transaction.customerAccount)
 	customerAccountTransactions: Transaction[];
 
@@ -53,6 +49,7 @@ export class Account extends BaseEntity {
 	@OneToMany(() => Transaction, (transaction) => transaction.receiverAccount)
 	receiverAccountTransactions: Transaction[];
 
+	@Field(() => Customer)
 	@ManyToOne(() => Customer, (customer) => customer.accounts)
 	customer: Customer;
 }

@@ -46,6 +46,9 @@ export class Customer extends BaseEntity {
 	@Column('character varying', { length: 8, unique: true })
 	phone: string;
 
-	@OneToMany(() => Account, (account) => account.customer)
+	@Field(() => [Account])
+	@OneToMany(() => Account, (account) => account.customer, {
+		cascade: ['insert', 'update'],
+	})
 	accounts: Account[];
 }

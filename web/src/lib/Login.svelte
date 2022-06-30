@@ -4,12 +4,7 @@
 	import HelperText from '@smui/textfield/helper-text';
 	import login from '$lib/login';
 	import { goto } from '$app/navigation';
-
-	interface Field {
-		invalid: boolean;
-		errorText: string;
-		content: string;
-	}
+	import type { Field } from './types';
 
 	let usernameField: Field = {
 		invalid: false,

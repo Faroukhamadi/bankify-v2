@@ -13,10 +13,10 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CustomerResolver = exports.CustomerInput = void 0;
-const Account_1 = require("../entities/Account");
 const Customer_1 = require("../entities/Customer");
 const teller_1 = require("./teller");
 const type_graphql_1 = require("type-graphql");
+const constants_1 = require("../constants");
 let CustomerResponse = class CustomerResponse {
 };
 __decorate([
@@ -33,11 +33,11 @@ CustomerResponse = __decorate([
 let FindCustomerInput = class FindCustomerInput {
 };
 __decorate([
-    (0, type_graphql_1.Field)(),
+    (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", Number)
 ], FindCustomerInput.prototype, "id", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(),
+    (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
 ], FindCustomerInput.prototype, "cin", void 0);
 FindCustomerInput = __decorate([
@@ -65,42 +65,140 @@ __decorate([
     (0, type_graphql_1.Field)(),
     __metadata("design:type", String)
 ], CustomerInput.prototype, "accountNumber", void 0);
-__decorate([
-    (0, type_graphql_1.Field)(),
-    __metadata("design:type", Number)
-], CustomerInput.prototype, "balance", void 0);
 CustomerInput = __decorate([
     (0, type_graphql_1.InputType)()
 ], CustomerInput);
 exports.CustomerInput = CustomerInput;
 let CustomerResolver = class CustomerResolver {
-    async createCustomer({ firstName, lastName, cin, phone, accountNumber, balance }, {}) {
+    async createCustomer({ firstName, lastName, cin, phone, accountNumber }, {}) {
+        if (firstName.length <= 2) {
+            return {
+                errors: [
+                    {
+                        field: 'firstName',
+                        message: 'First Name must contain 3 characters',
+                    },
+                ],
+            };
+        }
+        if (lastName.length <= 2) {
+            return {
+                errors: [
+                    {
+                        field: 'lastName',
+                        message: 'Last Name must contain 3 characters',
+                    },
+                ],
+            };
+        }
+        if (!constants_1.NAME_REGEX.test(firstName)) {
+            return {
+                errors: [
+                    {
+                        field: 'firstName',
+                        message: 'First Name must contain letters',
+                    },
+                ],
+            };
+        }
+        if (!constants_1.NAME_REGEX.test(lastName)) {
+            return {
+                errors: [
+                    {
+                        field: 'lastName',
+                        message: 'Last Name must contain letters',
+                    },
+                ],
+            };
+        }
+        if (!constants_1.NUMBER_REGEX.test(cin) || cin.length != 8) {
+            return {
+                errors: [
+                    {
+                        field: 'cin',
+                        message: 'cin must contain 8 numbers',
+                    },
+                ],
+            };
+        }
+        if (!constants_1.NUMBER_REGEX.test(phone) || phone.length != 8) {
+            return {
+                errors: [
+                    {
+                        field: 'phone',
+                        message: 'Phone number must contain 8 numbers',
+                    },
+                ],
+            };
+        }
+        if (!constants_1.NUMBER_REGEX.test(accountNumber) || accountNumber.length != 12) {
+            return {
+                errors: [
+                    {
+                        field: 'accountNumber',
+                        message: 'Account Number must contain 12 numbers',
+                    },
+                ],
+            };
+        }
+        console.log(accountNumber.length);
         const customer = Customer_1.Customer.create({
             firstName,
             lastName,
             cin,
             phone,
+            accounts: [
+                {
+                    accountNumber,
+                },
+            ],
         });
-        const account = Account_1.Account.create({
-            accountNumber,
-            balance,
-        });
-        customer.accounts.push(account);
+        console.log('customer accounts: ', customer.accounts);
         try {
             await customer.save();
         }
         catch (err) {
-            console.log('customer save:', err);
+            console.log('err', err);
+            if (err.code === '23505' && err.detail.includes('cin')) {
+                return {
+                    errors: [
+                        {
+                            field: 'cin',
+                            message: 'cin already taken',
+                        },
+                    ],
+                };
+            }
+            else if (err.code === '23505' && err.detail.includes('phone')) {
+                return {
+                    errors: [
+                        {
+                            field: 'phone',
+                            message: 'phone already taken',
+                        },
+                    ],
+                };
+            }
         }
         return { customer };
     }
-    async customers() {
-        return Customer_1.Customer.find();
+    customers() {
+        return Customer_1.Customer.find({
+            relations: {
+                accounts: true,
+            },
+        });
     }
     async customer({ id, cin }) {
         return Customer_1.Customer.findOne({
             where: [{ id }, { cin }],
+            relations: { accounts: true },
         });
+    }
+    async deleteCustomer(cin) {
+        const customer = await Customer_1.Customer.findOneBy({ cin });
+        await Customer_1.Customer.delete({ cin });
+        return customer;
     }
 };
 __decorate([
@@ -124,6 +222,13 @@ __decorate([
     __metadata("design:paramtypes", [FindCustomerInput]),
     __metadata("design:returntype", Promise)
 ], CustomerResolver.prototype, "customer", null);
+__decorate([
+    (0, type_graphql_1.Mutation)(() => Customer_1.Customer),
+    __param(0, (0, type_graphql_1.Arg)('cin', () => String)),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], CustomerResolver.prototype, "deleteCustomer", null);
 CustomerResolver = __decorate([
     (0, type_graphql_1.Resolver)()
 ], CustomerResolver);

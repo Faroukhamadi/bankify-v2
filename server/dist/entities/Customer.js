@@ -56,7 +56,10 @@ __decorate([
     __metadata("design:type", String)
 ], Customer.prototype, "phone", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => Account_1.Account, (account) => account.customer),
+    (0, type_graphql_1.Field)(() => [Account_1.Account]),
+    (0, typeorm_1.OneToMany)(() => Account_1.Account, (account) => account.customer, {
+        cascade: ['insert', 'update'],
+    }),
     __metadata("design:type", Array)
 ], Customer.prototype, "accounts", void 0);
 Customer = __decorate([

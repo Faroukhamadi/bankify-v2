@@ -60,7 +60,7 @@ let AccountResolver = class AccountResolver {
                 ],
             };
         }
-        if (account.customers.length) {
+        if (account.customer) {
             return {
                 errors: [
                     {
@@ -81,7 +81,7 @@ let AccountResolver = class AccountResolver {
                 ],
             };
         }
-        account.customers.push(customer);
+        account.customer;
         await account.save();
         return {
             account,
@@ -91,7 +91,7 @@ let AccountResolver = class AccountResolver {
     async balance(userId, {}) {
         const account = await Account_1.Account.findOne({
             where: {
-                customers: {
+                customer: {
                     id: userId,
                 },
             },
@@ -104,7 +104,7 @@ let AccountResolver = class AccountResolver {
     async accounts({}) {
         return Account_1.Account.find({
             relations: {
-                customers: true,
+                customer: true,
             },
         });
     }
