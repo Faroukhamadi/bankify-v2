@@ -5,6 +5,7 @@
 	import login from '$lib/login';
 	import { goto } from '$app/navigation';
 	import { INPUT_FIELD } from './constants';
+	import { KQL_Me } from './graphql/_kitql/graphqlStores';
 
 	let usernameField = { ...INPUT_FIELD };
 	let passwordField = { ...INPUT_FIELD };
@@ -17,6 +18,7 @@
 		on:submit|preventDefault={async () => {
 			[usernameField, passwordField] = await login(usernameField, passwordField);
 			if (!usernameField.invalid && !passwordField.invalid) {
+				await KQL_Me.query({ settings: { policy: 'network-only' } });
 				goto('/');
 			}
 		}}

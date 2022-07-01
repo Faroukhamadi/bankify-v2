@@ -1,4 +1,3 @@
-import { PASSWORD_REGEX } from '../constants';
 import { UsernamePasswordInput } from './UsernamePasswordInput';
 
 export const validateRegister = (options: UsernamePasswordInput) => {

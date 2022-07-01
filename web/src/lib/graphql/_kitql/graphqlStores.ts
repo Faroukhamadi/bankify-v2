@@ -248,6 +248,55 @@ function KQL_LoginStore() {
  */
 export const KQL_Login = KQL_LoginStore();
 
+function KQL_LogoutStore() {
+	const operationName = 'KQL_Logout';
+	const operationType = ResponseResultType.Mutation;
+
+	// prettier-ignore
+	const { subscribe, set, update } = writable<RequestResult<Types.LogoutMutation, Types.LogoutMutationVariables>>({...defaultStoreValue, operationName, operationType});
+
+		async function mutateLocal(
+			params?: RequestParameters<Types.LogoutMutationVariables>
+		): Promise<RequestResult<Types.LogoutMutation, Types.LogoutMutationVariables>> {
+			let { fetch, variables } = params ?? {};
+
+			const storedVariables = get(KQL_Logout).variables;
+			variables = variables ?? storedVariables;
+
+			update((c) => {
+				return { ...c, isFetching: true, status: RequestStatus.LOADING };
+			});
+
+			// prettier-ignore
+			const res = await kitQLClient.request<Types.LogoutMutation, Types.LogoutMutationVariables>({
+				skFetch: fetch,
+				document: Types.LogoutDocument,
+				variables, 
+				operationName, 
+				operationType, 
+				browser
+			});
+			const result = { ...res, isFetching: false, status: RequestStatus.DONE, variables };
+			set(result);
+			return result;
+		}
+
+	return {
+		subscribe,
+
+		/**
+		 * Can be used for SSR, but simpler option is `.queryLoad`
+		 * @returns fill this store & the cache
+		 */
+		mutate: mutateLocal,
+
+	};
+}
+/**
+ * KitQL Svelte Store with the latest `Logout` Operation
+ */
+export const KQL_Logout = KQL_LogoutStore();
+
 function KQL_HelloStore() {
 	const operationName = 'KQL_Hello';
 	const operationType = ResponseResultType.Query;

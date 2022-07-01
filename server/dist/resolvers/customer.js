@@ -30,19 +30,6 @@ __decorate([
 CustomerResponse = __decorate([
     (0, type_graphql_1.ObjectType)()
 ], CustomerResponse);
-let FindCustomerInput = class FindCustomerInput {
-};
-__decorate([
-    (0, type_graphql_1.Field)({ nullable: true }),
-    __metadata("design:type", Number)
-], FindCustomerInput.prototype, "id", void 0);
-__decorate([
-    (0, type_graphql_1.Field)({ nullable: true }),
-    __metadata("design:type", String)
-], FindCustomerInput.prototype, "cin", void 0);
-FindCustomerInput = __decorate([
-    (0, type_graphql_1.InputType)()
-], FindCustomerInput);
 let CustomerInput = class CustomerInput {
 };
 __decorate([
@@ -188,11 +175,22 @@ let CustomerResolver = class CustomerResolver {
             },
         });
     }
-    async customer({ id, cin }) {
-        return Customer_1.Customer.findOne({
-            where: [{ id }, { cin }],
+    async customer(cin) {
+        const customer = await Customer_1.Customer.findOne({
+            where: { cin },
             relations: { accounts: true },
         });
+        if (!customer) {
+            return {
+                errors: [
+                    {
+                        message: 'customer with specified cin does not exist',
+                        field: 'cin',
+                    },
+                ],
+            };
+        }
+        return { customer };
     }
     async deleteCustomer(cin) {
         const customer = await Customer_1.Customer.findOneBy({ cin });
@@ -215,10 +213,10 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], CustomerResolver.prototype, "customers", null);
 __decorate([
-    (0, type_graphql_1.Query)(() => Customer_1.Customer),
-    __param(0, (0, type_graphql_1.Arg)('options')),
+    (0, type_graphql_1.Query)(() => CustomerResponse),
+    __param(0, (0, type_graphql_1.Arg)('cin')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [FindCustomerInput]),
+    __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], CustomerResolver.prototype, "customer", null);
 __decorate([

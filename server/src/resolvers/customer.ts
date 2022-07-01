@@ -23,14 +23,6 @@ class CustomerResponse {
 }
 
 @InputType()
-class FindCustomerInput {
-	@Field({ nullable: true })
-	id?: number;
-	@Field({ nullable: true })
-	cin?: string;
-}
-
-@InputType()
 export class CustomerInput {
 	@Field()
 	firstName: string;
@@ -42,8 +34,6 @@ export class CustomerInput {
 	phone: string;
 	@Field()
 	accountNumber: string;
-	// @Field()
-	// balance: number;
 }
 
 @Resolver()
@@ -179,14 +169,26 @@ export class CustomerResolver {
 		});
 	}
 
-	@Query(() => Customer)
-	async customer(
-		@Arg('options') { id, cin }: FindCustomerInput
-	): Promise<Customer | null> {
-		return Customer.findOne({
-			where: [{ id }, { cin }],
+	// TODO: Fix this resolver
+	@Query(() => CustomerResponse)
+	async customer(@Arg('cin') cin: string): Promise<CustomerResponse> {
+		const customer = await Customer.findOne({
+			where: { cin },
 			relations: { accounts: true },
 		});
+
+		if (!customer) {
+			return {
+				errors: [
+					{
+						message: 'customer with specified cin does not exist',
+						field: 'cin',
+					},
+				],
+			};
+		}
+
+		return { customer };
 	}
 
 	@Mutation(() => Customer)

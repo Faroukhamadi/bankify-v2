@@ -61,7 +61,7 @@
 		cursor: default;
 	}
 	form {
-		height: 100vh;
+		height: 72vh;
 		margin-top: 6rem;
 		display: flex;
 		align-items: center;

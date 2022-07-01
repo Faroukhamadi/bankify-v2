@@ -65,3 +65,11 @@
 221450:C 30 Jun 2022 02:28:04.309 * DB saved on disk
 221450:C 30 Jun 2022 02:28:04.310 * Fork CoW for RDB: current 0 MB, peak 0 MB, average 0 MB
 34026:M 30 Jun 2022 02:28:04.371 * Background saving terminated with success
+34026:M 01 Jul 2022 00:55:07.789 # Possible SECURITY ATTACK detected. It looks like somebody is sending POST or Host: commands to Redis. This is likely due to an attacker attempting to use Cross Protocol Scripting to compromise your Redis instance. Connection aborted.
+34026:M 01 Jul 2022 00:56:53.833 # Possible SECURITY ATTACK detected. It looks like somebody is sending POST or Host: commands to Redis. This is likely due to an attacker attempting to use Cross Protocol Scripting to compromise your Redis instance. Connection aborted.
+34026:M 01 Jul 2022 00:59:10.467 # Possible SECURITY ATTACK detected. It looks like somebody is sending POST or Host: commands to Redis. This is likely due to an attacker attempting to use Cross Protocol Scripting to compromise your Redis instance. Connection aborted.
+34026:M 01 Jul 2022 06:21:05.935 * 1 changes in 3600 seconds. Saving...
+34026:M 01 Jul 2022 06:21:05.936 * Background saving started by pid 540358
+540358:C 01 Jul 2022 06:21:05.973 * DB saved on disk
+540358:C 01 Jul 2022 06:21:05.974 * Fork CoW for RDB: current 0 MB, peak 0 MB, average 0 MB
+34026:M 01 Jul 2022 06:21:06.036 * Background saving terminated with success

@@ -29,7 +29,7 @@ const main = async () => {
         const transactions = await transactionRepository.find();
         res.json(transactions);
     });
-    app.get('/tellers', async (req, res) => {
+    app.get('/tellers', async (_req, res) => {
         const tellers = await tellerRepository.find();
         res.json(tellers);
     });

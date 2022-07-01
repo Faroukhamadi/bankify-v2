@@ -17,9 +17,9 @@
 </script>
 
 <script lang="ts">
-	import { Customer } from '$lib/graphql/_kitql/graphqlTypes';
 	import List, { Item, Text, PrimaryText, SecondaryText } from '@smui/list';
-	import { dataset_dev } from 'svelte/internal';
+	import Button from '@smui/button/src/Button.svelte';
+	import { Icon, Label } from '@smui/button';
 
 	export let res: RequestResult<
 		CustomerQuery,
@@ -27,8 +27,6 @@
 			cin: string;
 		}>
 	>;
-
-	console.log(new Date(parseInt(res.data!.customer.customer!.createdAt)).toLocaleDateString());
 </script>
 
 <h1>Customer Information:</h1>
@@ -107,6 +105,13 @@
 			</Text>
 		</Item>
 	</List>
+
+	<a sveltekit:prefetch href="/">
+		<Button variant="raised">
+			<Icon class="material-icons">arrow_backward</Icon>
+			<Label>HOME</Label>
+		</Button>
+	</a>
 </div>
 
 <style>
@@ -116,5 +121,8 @@
 		font-size: 3rem;
 		text-align: center;
 		color: #676778;
+	}
+	a {
+		text-decoration: none;
 	}
 </style>
