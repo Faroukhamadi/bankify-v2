@@ -37,7 +37,7 @@ export class Account extends BaseEntity {
 	balance!: number;
 
 	@Field(() => String)
-	@Column('character varying', { length: 12 })
+	@Column('character varying', { length: 12, unique: true })
 	accountNumber: string;
 
 	@OneToMany(() => Transaction, (transaction) => transaction.customerAccount)

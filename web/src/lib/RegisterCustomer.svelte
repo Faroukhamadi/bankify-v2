@@ -5,7 +5,6 @@
 	import { INPUT_FIELD } from '$lib/constants';
 	import registerCustomer from './registerCustomer';
 	import type { Field } from './types';
-	import { goto } from '$app/navigation';
 
 	let firstNameField = { ...INPUT_FIELD };
 	let lastNameField = { ...INPUT_FIELD };

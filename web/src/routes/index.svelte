@@ -25,14 +25,15 @@
 	import Fab from '@smui/fab/src/Fab.svelte';
 	import { goto } from '$app/navigation';
 	import About from '$lib/About.svelte';
+	import Transaction from '$lib/transactions/Transaction.svelte';
 
-	type NavState = 'Search' | 'Register';
+	type NavState = 'Search' | 'Register' | 'Transaction';
 
 	let active: NavState = 'Search';
 </script>
 
 <div>
-	<TabBar tabs={['Search', 'Register']} let:tab bind:active>
+	<TabBar tabs={['Search', 'Register', 'Transaction']} let:tab bind:active>
 		<Tab {tab}>
 			<Label>{tab}</Label>
 		</Tab>
@@ -41,8 +42,10 @@
 
 {#if active === 'Search'}
 	<Search />
-{:else}
+{:else if active === 'Register'}
 	<Register />
+{:else}
+	<Transaction />
 {/if}
 
 <div

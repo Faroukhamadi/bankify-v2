@@ -43,7 +43,7 @@ __decorate([
 ], Account.prototype, "balance", void 0);
 __decorate([
     (0, type_graphql_1.Field)(() => String),
-    (0, typeorm_1.Column)('character varying', { length: 12 }),
+    (0, typeorm_1.Column)('character varying', { length: 12, unique: true }),
     __metadata("design:type", String)
 ], Account.prototype, "accountNumber", void 0);
 __decorate([
