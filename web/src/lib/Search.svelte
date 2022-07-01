@@ -3,33 +3,56 @@
 	import Paper from '@smui/paper';
 	import Fab from '@smui/fab';
 	import { Icon } from '@smui/common';
+	import { INPUT_FIELD } from './constants';
+	import { KQL_Customer } from './graphql/_kitql/graphqlStores';
+	import type { Field } from './types';
+	import { goto } from '$app/navigation';
+	import HelperText from '@smui/textfield/helper-text';
 
-	let value = '';
+	let cinField = { ...INPUT_FIELD };
 
-	function doSearch() {
-		alert('Search for ' + value);
-	}
+	const search = async (cinField: Field) => {
+		const res = await KQL_Customer.query({
+			variables: { cin: cinField.content }
+		});
 
-	function handleKeyDown(event: CustomEvent | KeyboardEvent) {
-		event = event as KeyboardEvent;
-		if (event.key === 'Enter') {
-			doSearch();
+		if (res.data?.customer.errors) {
+			cinField.invalid = true;
+			cinField.errorText = res.data.customer.errors[0].message;
+		} else {
+			goto(`/customers/${cinField.content}`);
 		}
-	}
+		return cinField;
+	};
 </script>
 
-<main>
+<form
+	on:submit|preventDefault={async () => {
+		cinField = await search(cinField);
+	}}
+>
 	<h1 style="font-family: Roboto;">Search For Customer</h1>
 	<div class="solo-demo-container solo-container">
 		<Paper class="solo-paper" elevation={6}>
 			<Icon class="material-icons">search</Icon>
-			<Input bind:value on:keydown={handleKeyDown} placeholder="Enter CIN" class="solo-input" />
+			<Input
+				bind:value={cinField.content}
+				placeholder="Enter CIN"
+				class="solo-input"
+				required={true}
+			/>
 		</Paper>
-		<Fab on:click={doSearch} disabled={value === ''} color="primary" mini class="solo-fab">
+		<Fab color="primary" mini class="solo-fab">
 			<Icon class="material-icons">arrow_forward</Icon>
 		</Fab>
 	</div>
-</main>
+
+	{#if cinField.invalid}
+		<HelperText style="color: red; font-size: large;" validationMsg persistent slot="helper"
+			>{cinField.errorText}</HelperText
+		>
+	{/if}
+</form>
 
 <style>
 	h1 {
@@ -37,7 +60,7 @@
 		color: #676778;
 		cursor: default;
 	}
-	main {
+	form {
 		height: 100vh;
 		margin-top: 6rem;
 		display: flex;

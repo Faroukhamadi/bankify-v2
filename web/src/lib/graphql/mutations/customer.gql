@@ -1,0 +1,21 @@
+query Customer($cin: String!) {
+	customer(cin: $cin) {
+		errors {
+			field
+			message
+		}
+		customer {
+			phone
+			firstName
+			lastName
+			cin
+			createdAt
+			updatedAt
+			deletedAt
+			accounts {
+				balance
+				accountNumber
+			}
+		}
+	}
+}
