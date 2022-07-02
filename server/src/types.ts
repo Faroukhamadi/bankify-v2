@@ -4,13 +4,13 @@ import { DataSource } from 'typeorm';
 import { Transaction } from './entities/Transaction';
 import { FieldError } from './resolvers/teller';
 
-export interface WithdrawResponse {
+export interface WithdrawOrDepositResponse {
 	errors?: FieldError[];
 	transaction?: Transaction;
 	done?: true;
 }
 
-export interface WithdrawInput {
+export interface WithdrawOrDepositInput {
 	cin: string;
 	accountNumber: string;
 	amount: number;

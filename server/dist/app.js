@@ -10,6 +10,7 @@ const Account_1 = require("./entities/Account");
 const Customer_1 = require("./entities/Customer");
 const Teller_1 = require("./entities/Teller");
 const Transaction_1 = require("./entities/Transaction");
+const validateWithdraw_1 = require("./utils/validateWithdraw");
 const main = async () => {
     const myDataSource = new typeorm_1.DataSource({
         type: 'postgres',
@@ -24,6 +25,11 @@ const main = async () => {
     const app = (0, express_1.default)();
     app.use(express_1.default.json());
     app.post('/transactions/withdraw', async (req, res) => {
+        const errors = (0, validateWithdraw_1.validateWithdraw)(req.body);
+        if (errors) {
+            res.json(errors);
+            return;
+        }
         const { cin, accountNumber, amount, tellerId } = req.body;
         const customer = await Customer_1.Customer.findOne({
             where: { cin },
@@ -40,8 +46,6 @@ const main = async () => {
             });
             return;
         }
-        console.log('customer : ', customer);
-        console.log('customer accounts: ', customer === null || customer === void 0 ? void 0 : customer.accounts);
         if (!(customer === null || customer === void 0 ? void 0 : customer.accounts.some((a) => a.accountNumber === accountNumber))) {
             res.json({
                 errors: [
@@ -54,17 +58,6 @@ const main = async () => {
             return;
         }
         const account = customer === null || customer === void 0 ? void 0 : customer.accounts.find((a) => a['accountNumber'] === accountNumber);
-        if (amount <= 0) {
-            res.json({
-                errors: [
-                    {
-                        message: 'Please provide a positive amount',
-                        field: 'amount',
-                    },
-                ],
-            });
-            return;
-        }
         if (account.balance - amount < 0) {
             res.json({
                 errors: [
@@ -88,6 +81,68 @@ const main = async () => {
             res.json({
                 transaction,
             });
+            return;
+        }
+        catch (err) {
+            console.log('unexpected err:', err);
+            res.json({
+                errors: [
+                    {
+                        message: 'unexpected error',
+                        field: 'unknown',
+                    },
+                ],
+            });
+            return;
+        }
+    });
+    app.post('/transactions/deposit', async (req, res) => {
+        const errors = (0, validateWithdraw_1.validateWithdraw)(req.body);
+        if (errors) {
+            res.json(errors);
+            return;
+        }
+        const { cin, accountNumber, amount, tellerId } = req.body;
+        const customer = await Customer_1.Customer.findOne({
+            where: { cin },
+            relations: { accounts: true },
+        });
+        if (!customer) {
+            res.json({
+                errors: [
+                    {
+                        message: `customer with specified cin doesn't exist`,
+                        field: 'cin',
+                    },
+                ],
+            });
+            return;
+        }
+        if (!(customer === null || customer === void 0 ? void 0 : customer.accounts.some((a) => a.accountNumber === accountNumber))) {
+            res.json({
+                errors: [
+                    {
+                        message: `customer with specified cin doesn't have an account with entered account number`,
+                        field: 'accountNumber',
+                    },
+                ],
+            });
+            return;
+        }
+        const account = customer === null || customer === void 0 ? void 0 : customer.accounts.find((a) => a['accountNumber'] === accountNumber);
+        const transaction = Transaction_1.Transaction.create({
+            amount,
+            customerAccountId: account.id,
+            tellerId,
+        });
+        account.balance += amount;
+        try {
+            await (account === null || account === void 0 ? void 0 : account.save());
+            await transaction.save();
+            res.json({
+                transaction,
+            });
+            return;
         }
         catch (err) {
             console.log('unexpected err:', err);
@@ -106,7 +161,7 @@ const main = async () => {
         const transactions = await Transaction_1.Transaction.find();
         res.json(transactions);
     });
-    app.delete('/transactions', async (_, res) => {
+    app.delete('/transactions', async (_, _res) => {
         return Transaction_1.Transaction.delete({ id: (0, typeorm_1.In)([3, 4, 5]) });
     });
     app.get('/tellers', async (_req, res) => {
