@@ -18,8 +18,8 @@ let Transaction = class Transaction extends typeorm_1.BaseEntity {
 };
 __decorate([
     (0, type_graphql_1.Field)(() => type_graphql_1.ID),
-    (0, typeorm_1.PrimaryGeneratedColumn)('increment'),
-    __metadata("design:type", Number)
+    (0, typeorm_1.PrimaryColumn)(),
+    __metadata("design:type", String)
 ], Transaction.prototype, "id", void 0);
 __decorate([
     (0, type_graphql_1.Field)(() => String),

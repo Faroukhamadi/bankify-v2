@@ -5,7 +5,7 @@ import {
 	CreateDateColumn,
 	Entity,
 	ManyToOne,
-	PrimaryGeneratedColumn,
+	PrimaryColumn,
 	UpdateDateColumn,
 } from 'typeorm';
 import { Account } from './Account';
@@ -15,8 +15,8 @@ import { Teller } from './Teller';
 @Entity()
 export class Transaction extends BaseEntity {
 	@Field(() => ID)
-	@PrimaryGeneratedColumn('increment')
-	id: number;
+	@PrimaryColumn()
+	id: string;
 
 	@Field(() => String)
 	@CreateDateColumn()

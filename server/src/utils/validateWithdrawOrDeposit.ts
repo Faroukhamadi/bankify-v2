@@ -1,11 +1,11 @@
 import { NUMBER_REGEX } from '../constants';
-import { WithdrawOrDepositInput, WithdrawOrDepositResponse } from '../types';
+import { WithdrawOrDepositInput, TransactionResponse } from '../types';
 
-export const validateWithdraw = ({
+export const validateWithdrawOrDeposit = ({
 	cin,
 	accountNumber,
 	amount,
-}: WithdrawOrDepositInput): WithdrawOrDepositResponse | null => {
+}: WithdrawOrDepositInput): TransactionResponse | null => {
 	if (cin.length != 8) {
 		return {
 			errors: [

@@ -6,8 +6,14 @@ import { Account } from './entities/Account';
 import { Customer } from './entities/Customer';
 import { Teller } from './entities/Teller';
 import { Transaction } from './entities/Transaction';
-import { WithdrawOrDepositInput, WithdrawOrDepositResponse } from './types';
-import { validateWithdraw } from './utils/validateWithdraw';
+import {
+	WithdrawOrDepositInput,
+	TransactionResponse,
+	TransferInput,
+} from './types';
+import { validateTransfer } from './utils/validaterTransfer';
+import { validateWithdrawOrDeposit } from './utils/validateWithdrawOrDeposit';
+import { v4 } from 'uuid';
 
 const main = async () => {
 	const myDataSource = new DataSource({
@@ -29,9 +35,9 @@ const main = async () => {
 		'/transactions/withdraw',
 		async (
 			req: Request<{}, {}, WithdrawOrDepositInput>,
-			res: Response<WithdrawOrDepositResponse>
+			res: Response<TransactionResponse>
 		) => {
-			const errors = validateWithdraw(req.body);
+			const errors = validateWithdrawOrDeposit(req.body);
 			if (errors) {
 				res.json(errors);
 				return;
@@ -112,9 +118,9 @@ const main = async () => {
 		'/transactions/deposit',
 		async (
 			req: Request<{}, {}, WithdrawOrDepositInput>,
-			res: Response<WithdrawOrDepositResponse>
+			res: Response<TransactionResponse>
 		) => {
-			const errors = validateWithdraw(req.body);
+			const errors = validateWithdrawOrDeposit(req.body);
 			if (errors) {
 				res.json(errors);
 				return;
@@ -157,9 +163,148 @@ const main = async () => {
 				tellerId,
 			});
 
+			transaction.id = 'de' + v4();
+
+			//
+			//
+			//
+			//
+			//
+			//
+			return;
+
 			account!.balance += amount;
 			try {
 				await account?.save();
+				await transaction.save();
+				res.json({
+					transaction,
+				});
+				return;
+			} catch (err) {
+				console.log('unexpected err:', err);
+				res.json({
+					errors: [
+						{
+							message: 'unexpected error',
+							field: 'unknown',
+						},
+					],
+				});
+				return;
+			}
+		}
+	);
+
+	app.post(
+		'/transactions/transfer',
+		async (
+			req: Request<{}, {}, TransferInput>,
+			res: Response<TransactionResponse>
+		) => {
+			const errors = validateTransfer(req.body);
+			if (errors) {
+				res.json(errors);
+				return;
+			}
+			const {
+				senderCin,
+				receiverCin,
+				senderAccountNumber,
+				receiverAccountNumber,
+				amount,
+				tellerId,
+			} = req.body;
+			const sender = await Customer.findOne({
+				where: { cin: senderCin },
+				relations: { accounts: true },
+			});
+			const receiver = await Customer.findOne({
+				where: { cin: receiverCin },
+				relations: { accounts: true },
+			});
+			if (!sender) {
+				res.json({
+					errors: [
+						{
+							message: `sender with specified cin doesn't exist`,
+							field: 'cin',
+						},
+					],
+				});
+				return;
+			}
+
+			if (!receiver) {
+				res.json({
+					errors: [
+						{
+							message: `receiver with specified cin doesn't exist`,
+							field: 'cin',
+						},
+					],
+				});
+				return;
+			}
+
+			if (
+				!sender?.accounts.some((a) => a.accountNumber === senderAccountNumber)
+			) {
+				res.json({
+					errors: [
+						{
+							message: `sender with specified cin doesn't have an account with entered account number`,
+							field: 'senderAccountNumber',
+						},
+					],
+				});
+				return;
+			}
+			if (
+				!receiver?.accounts.some(
+					(a) => a.accountNumber === receiverAccountNumber
+				)
+			) {
+				res.json({
+					errors: [
+						{
+							message: `receiver with specified cin doesn't have an account with entered account number`,
+							field: 'receiverAccountNumber',
+						},
+					],
+				});
+				return;
+			}
+			const senderAccount = sender?.accounts.find(
+				(a) => a['accountNumber'] === senderAccountNumber
+			);
+			const receiverAccount = receiver?.accounts.find(
+				(a) => a['accountNumber'] === receiverAccountNumber
+			);
+			if (senderAccount!.balance - amount < 0) {
+				res.json({
+					errors: [
+						{
+							message: `Please check the sender's balance`,
+							field: 'amount',
+						},
+					],
+				});
+				return;
+			}
+
+			const transaction = Transaction.create({
+				amount,
+				receiverAccountId: receiverAccount?.id,
+				senderAccountId: senderAccount?.id,
+				tellerId,
+			});
+
+			senderAccount!.balance -= amount;
+			receiverAccount!.balance += amount;
+			try {
+				await senderAccount?.save();
+				await receiverAccount?.save();
 				await transaction.save();
 				res.json({
 					transaction,
@@ -205,7 +350,7 @@ const main = async () => {
 
 	app.get('/transactions/:id', async (req: Request, res: Response) => {
 		const transaction = await Transaction.findOneBy({
-			id: parseInt(req.params.id),
+			id: req.params.id,
 		});
 		return res.send(transaction);
 	});

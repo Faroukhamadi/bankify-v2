@@ -46,4 +46,4 @@ const validateWithdrawOrDeposit = ({ cin, accountNumber, amount, }) => {
     return null;
 };
 exports.validateWithdrawOrDeposit = validateWithdrawOrDeposit;
-//# sourceMappingURL=validateWithdraw.js.map
+//# sourceMappingURL=validateWithdrawOrDeposit.js.map
