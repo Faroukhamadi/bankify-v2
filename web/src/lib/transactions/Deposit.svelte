@@ -3,23 +3,17 @@
 	import Button from '@smui/button';
 	import HelperText from '@smui/textfield/helper-text';
 	import Textfield from '@smui/textfield';
+	import { TransactionResponse } from '../../../../server/src/types';
 
-	let accountNumberField = { ...INPUT_FIELD };
 	let CINField = { ...INPUT_FIELD };
+	let accountNumberField = { ...INPUT_FIELD };
 	let amountField = { ...INPUT_FIELD };
+	let JSONResponse: TransactionResponse;
 </script>
 
 <h1>Deposit</h1>
 <form
 	on:submit|preventDefault={async () => {
-		// [firstNameField, lastNameField, CINField, phoneField, accountNumberField] = fields =
-		// 	await registerCustomer(
-		// 		firstNameField,
-		// 		lastNameField,
-		// 		CINField,
-		// 		phoneField,
-		// 		accountNumberField
-		// 	);
 		console.log('submitting...');
 	}}
 >
