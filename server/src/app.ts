@@ -14,6 +14,8 @@ import {
 import { validateTransfer } from './utils/validaterTransfer';
 import { validateWithdrawOrDeposit } from './utils/validateWithdrawOrDeposit';
 import { v4 } from 'uuid';
+import cors from 'cors';
+import { DEV_ORIGIN } from './constants';
 
 const main = async () => {
 	const myDataSource = new DataSource({
@@ -29,6 +31,13 @@ const main = async () => {
 	await myDataSource.initialize();
 
 	const app = express();
+
+	app.use(
+		cors({
+			origin: [DEV_ORIGIN, 'http://localhost:4000'],
+		})
+	);
+
 	app.use(express.json());
 
 	app.post(
@@ -37,6 +46,9 @@ const main = async () => {
 			req: Request<{}, {}, WithdrawOrDepositInput>,
 			res: Response<TransactionResponse>
 		) => {
+			console.log('we are in withdraw');
+			console.log('this is the data we got from the browser: ', req.body);
+
 			const errors = validateWithdrawOrDeposit(req.body);
 			if (errors) {
 				res.json(errors);
@@ -122,6 +134,7 @@ const main = async () => {
 			req: Request<{}, {}, WithdrawOrDepositInput>,
 			res: Response<TransactionResponse>
 		) => {
+			console.log('we are in deposit');
 			const errors = validateWithdrawOrDeposit(req.body);
 			if (errors) {
 				res.json(errors);
@@ -196,6 +209,7 @@ const main = async () => {
 			req: Request<{}, {}, TransferInput>,
 			res: Response<TransactionResponse>
 		) => {
+			console.log('we are in transfer');
 			const errors = validateTransfer(req.body);
 			if (errors) {
 				res.json(errors);

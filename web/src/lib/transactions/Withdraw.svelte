@@ -3,24 +3,51 @@
 	import Button from '@smui/button';
 	import HelperText from '@smui/textfield/helper-text';
 	import Textfield from '@smui/textfield';
+	import type { Field } from '$lib/types';
+	import type { WithdrawOrDepositInput, TransactionResponse } from '../../../../server/src/types';
 
-	let accountNumberField = { ...INPUT_FIELD };
 	let CINField = { ...INPUT_FIELD };
+	let accountNumberField = { ...INPUT_FIELD };
 	let amountField = { ...INPUT_FIELD };
+	let JSONResponse: TransactionResponse;
 </script>
 
 <h1>Withdraw</h1>
 <form
 	on:submit|preventDefault={async () => {
-		// [firstNameField, lastNameField, CINField, phoneField, accountNumberField] = fields =
-		// 	await registerCustomer(
-		// 		firstNameField,
-		// 		lastNameField,
-		// 		CINField,
-		// 		phoneField,
-		// 		accountNumberField
-		// 	);
-		console.log('submitting...');
+		const response = await fetch('http://localhost:4001/transactions/withdraw', {
+			method: 'POST',
+			mode: 'cors',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				cin: CINField.content,
+				accountNumber: accountNumberField.content,
+				amount: parseInt(amountField.content),
+				tellerId: 1
+			})
+		});
+		JSONResponse = await response.json();
+		if (JSONResponse.errors && JSONResponse.errors[0].field === 'cin') {
+			CINField.invalid = true;
+			CINField.errorText = JSONResponse.errors[0].message;
+		} else {
+			CINField.invalid = false;
+		}
+		if (JSONResponse.errors && JSONResponse.errors[0].field === 'accountNumber') {
+			accountNumberField.invalid = true;
+			accountNumberField.errorText = JSONResponse.errors[0].message;
+		} else {
+			accountNumberField.invalid = false;
+		}
+		if (JSONResponse.errors && JSONResponse.errors[0].field === 'amount') {
+			amountField.invalid = true;
+			amountField.errorText = JSONResponse.errors[0].message;
+		} else {
+			amountField.invalid = false;
+		}
+		console.log('This is the response: ', JSONResponse);
 	}}
 >
 	<Textfield

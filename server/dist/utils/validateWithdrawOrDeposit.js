@@ -33,6 +33,16 @@ const validateWithdrawOrDeposit = ({ cin, accountNumber, amount, }) => {
             ],
         };
     }
+    if (amount === null) {
+        return {
+            errors: [
+                {
+                    field: 'amount',
+                    message: 'amount must be a number',
+                },
+            ],
+        };
+    }
     if (amount <= 0) {
         return {
             errors: [

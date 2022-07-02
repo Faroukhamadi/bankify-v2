@@ -13,6 +13,8 @@ const Transaction_1 = require("./entities/Transaction");
 const validaterTransfer_1 = require("./utils/validaterTransfer");
 const validateWithdrawOrDeposit_1 = require("./utils/validateWithdrawOrDeposit");
 const uuid_1 = require("uuid");
+const cors_1 = __importDefault(require("cors"));
+const constants_1 = require("./constants");
 const main = async () => {
     const myDataSource = new typeorm_1.DataSource({
         type: 'postgres',
@@ -25,8 +27,13 @@ const main = async () => {
     });
     await myDataSource.initialize();
     const app = (0, express_1.default)();
+    app.use((0, cors_1.default)({
+        origin: [constants_1.DEV_ORIGIN, 'http://localhost:4000'],
+    }));
     app.use(express_1.default.json());
     app.post('/transactions/withdraw', async (req, res) => {
+        console.log('we are in withdraw');
+        console.log('this is the data we got from the browser: ', req.body);
         const errors = (0, validateWithdrawOrDeposit_1.validateWithdrawOrDeposit)(req.body);
         if (errors) {
             res.json(errors);
@@ -100,6 +107,7 @@ const main = async () => {
         }
     });
     app.post('/transactions/deposit', async (req, res) => {
+        console.log('we are in deposit');
         const errors = (0, validateWithdrawOrDeposit_1.validateWithdrawOrDeposit)(req.body);
         if (errors) {
             res.json(errors);
@@ -162,6 +170,7 @@ const main = async () => {
         }
     });
     app.post('/transactions/transfer', async (req, res) => {
+        console.log('we are in transfer');
         const errors = (0, validaterTransfer_1.validateTransfer)(req.body);
         if (errors) {
             res.json(errors);
