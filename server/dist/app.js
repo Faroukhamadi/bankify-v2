@@ -76,6 +76,7 @@ const main = async () => {
             customerAccountId: account.id,
             tellerId,
         });
+        transaction.id = 'wi:' + (0, uuid_1.v4)();
         account.balance -= amount;
         try {
             await (account === null || account === void 0 ? void 0 : account.save());
@@ -137,8 +138,7 @@ const main = async () => {
             customerAccountId: account.id,
             tellerId,
         });
-        transaction.id = 'de' + (0, uuid_1.v4)();
-        return;
+        transaction.id = 'de:' + (0, uuid_1.v4)();
         account.balance += amount;
         try {
             await (account === null || account === void 0 ? void 0 : account.save());
@@ -239,6 +239,7 @@ const main = async () => {
             senderAccountId: senderAccount === null || senderAccount === void 0 ? void 0 : senderAccount.id,
             tellerId,
         });
+        transaction.id = 'tr:' + (0, uuid_1.v4)();
         senderAccount.balance -= amount;
         receiverAccount.balance += amount;
         try {

@@ -91,6 +91,8 @@ const main = async () => {
 				tellerId,
 			});
 
+			transaction.id = 'wi:' + v4();
+
 			account!.balance -= amount;
 			try {
 				await account?.save();
@@ -163,15 +165,7 @@ const main = async () => {
 				tellerId,
 			});
 
-			transaction.id = 'de' + v4();
-
-			//
-			//
-			//
-			//
-			//
-			//
-			return;
+			transaction.id = 'de:' + v4();
 
 			account!.balance += amount;
 			try {
@@ -299,6 +293,8 @@ const main = async () => {
 				senderAccountId: senderAccount?.id,
 				tellerId,
 			});
+
+			transaction.id = 'tr:' + v4();
 
 			senderAccount!.balance -= amount;
 			receiverAccount!.balance += amount;
