@@ -209,7 +209,6 @@ const main = async () => {
 			req: Request<{}, {}, TransferInput>,
 			res: Response<TransactionResponse>
 		) => {
-			console.log('we are in transfer');
 			const errors = validateTransfer(req.body);
 			if (errors) {
 				res.json(errors);
@@ -236,7 +235,7 @@ const main = async () => {
 					errors: [
 						{
 							message: `sender with specified cin doesn't exist`,
-							field: 'cin',
+							field: 'senderCin',
 						},
 					],
 				});
@@ -248,7 +247,7 @@ const main = async () => {
 					errors: [
 						{
 							message: `receiver with specified cin doesn't exist`,
-							field: 'cin',
+							field: 'senderCin',
 						},
 					],
 				});
