@@ -3,26 +3,65 @@
 	import Button from '@smui/button';
 	import HelperText from '@smui/textfield/helper-text';
 	import Textfield from '@smui/textfield';
+	import type { TransactionResponse } from '../../../../server/src/types';
 
 	let senderAccountNumberField = { ...INPUT_FIELD };
 	let receiverAccountNumberField = { ...INPUT_FIELD };
 	let senderCINField = { ...INPUT_FIELD };
 	let receiverCINField = { ...INPUT_FIELD };
 	let amountField = { ...INPUT_FIELD };
+	let JSONResponse: TransactionResponse;
 </script>
 
 <h1>Transfer</h1>
 <form
 	on:submit|preventDefault={async () => {
-		// [firstNameField, lastNameField, CINField, phoneField, senderAccountNumberField] = fields =
-		// 	await registerCustomer(
-		// 		firstNameField,
-		// 		lastNameField,
-		// 		CINField,
-		// 		phoneField,
-		// 		senderAccountNumberField
-		// 	);
-		console.log('submitting...');
+		const response = await fetch('http://localhost:4001/transactions/transfer', {
+			method: 'POST',
+			mode: 'cors',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				senderCin: senderCINField.content,
+				receiverCin: receiverCINField.content,
+				senderAccountNumber: senderAccountNumberField.content,
+				receiverAccountNumber: receiverAccountNumberField.content,
+				amount: amountField.content,
+				tellerId: 1
+			})
+		});
+		JSONResponse = await response.json();
+		if (JSONResponse.errors && JSONResponse.errors[0].field === 'senderCin') {
+			senderCINField.invalid = true;
+			senderCINField.errorText = JSONResponse.errors[0].message;
+		} else {
+			senderCINField.invalid = false;
+		}
+		if (JSONResponse.errors && JSONResponse.errors[0].field === 'receiverCin') {
+			receiverCINField.invalid = true;
+			receiverCINField.errorText = JSONResponse.errors[0].message;
+		} else {
+			receiverCINField.invalid = false;
+		}
+		if (JSONResponse.errors && JSONResponse.errors[0].field === 'senderAccountNumber') {
+			senderAccountNumberField.invalid = true;
+			senderAccountNumberField.errorText = JSONResponse.errors[0].message;
+		} else {
+			senderAccountNumberField.invalid = false;
+		}
+		if (JSONResponse.errors && JSONResponse.errors[0].field === 'receiverAccountNumber') {
+			receiverAccountNumberField.invalid = true;
+			receiverAccountNumberField.errorText = JSONResponse.errors[0].message;
+		} else {
+			receiverAccountNumberField.invalid = false;
+		}
+		if (JSONResponse.errors && JSONResponse.errors[0].field === 'amount') {
+			amountField.invalid = true;
+			amountField.errorText = JSONResponse.errors[0].message;
+		} else {
+			amountField.invalid = false;
+		}
 	}}
 >
 	<Textfield

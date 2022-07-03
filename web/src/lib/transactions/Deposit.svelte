@@ -14,7 +14,38 @@
 <h1>Deposit</h1>
 <form
 	on:submit|preventDefault={async () => {
-		console.log('submitting...');
+		const response = await fetch('http://localhost:4001/transactions/deposit', {
+			method: 'POST',
+			mode: 'cors',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				cin: CINField.content,
+				accountNumber: accountNumberField.content,
+				amount: parseInt(amountField.content),
+				tellerId: 1
+			})
+		});
+		JSONResponse = await response.json();
+		if (JSONResponse.errors && JSONResponse.errors[0].field === 'cin') {
+			CINField.invalid = true;
+			CINField.errorText = JSONResponse.errors[0].message;
+		} else {
+			CINField.invalid = false;
+		}
+		if (JSONResponse.errors && JSONResponse.errors[0].field === 'accountNumber') {
+			accountNumberField.invalid = true;
+			accountNumberField.errorText = JSONResponse.errors[0].message;
+		} else {
+			CINField.invalid = false;
+		}
+		if (JSONResponse.errors && JSONResponse.errors[0].field === 'amount') {
+			amountField.invalid = true;
+			amountField.errorText = JSONResponse.errors[0].message;
+		} else {
+			amountField.invalid = false;
+		}
 	}}
 >
 	<Textfield

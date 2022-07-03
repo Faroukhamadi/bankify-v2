@@ -3,8 +3,7 @@
 	import Button from '@smui/button';
 	import HelperText from '@smui/textfield/helper-text';
 	import Textfield from '@smui/textfield';
-	import type { Field } from '$lib/types';
-	import type { WithdrawOrDepositInput, TransactionResponse } from '../../../../server/src/types';
+	import type { TransactionResponse } from '../../../../server/src/types';
 
 	let CINField = { ...INPUT_FIELD };
 	let accountNumberField = { ...INPUT_FIELD };
@@ -47,7 +46,6 @@
 		} else {
 			amountField.invalid = false;
 		}
-		console.log('This is the response: ', JSONResponse);
 	}}
 >
 	<Textfield
