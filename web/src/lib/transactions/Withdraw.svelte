@@ -5,6 +5,7 @@
 	import Textfield from '@smui/textfield';
 	import CircularProgress from '@smui/circular-progress';
 	import type { TransactionResponse } from '../../../../server/src/types';
+	import { KQL_Me } from '$lib/graphql/_kitql/graphqlStores';
 
 	let CINField = { ...INPUT_FIELD };
 	let accountNumberField = { ...INPUT_FIELD };
@@ -18,6 +19,7 @@
 	<form
 		on:submit|preventDefault={async () => {
 			loading = true;
+			const teller = await KQL_Me.query();
 			const response = await fetch('http://localhost:4001/transactions/withdraw', {
 				method: 'POST',
 				mode: 'cors',
@@ -28,9 +30,10 @@
 					cin: CINField.content,
 					accountNumber: accountNumberField.content,
 					amount: parseInt(amountField.content),
-					tellerId: 1
+					tellerId: teller.data?.me?.id
 				})
 			});
+
 			JSONResponse = await response.json();
 			if (JSONResponse.errors && JSONResponse.errors[0].field === 'cin') {
 				CINField.invalid = true;
@@ -55,8 +58,10 @@
 				CINField.content = '';
 				accountNumberField.content = '';
 				amountField.content = '';
+				setTimeout(() => (loading = false), 500);
+			} else {
+				loading = false;
 			}
-			setTimeout(() => (loading = false), 500);
 		}}
 	>
 		<Textfield

@@ -5,6 +5,7 @@
 	import Textfield from '@smui/textfield';
 	import CircularProgress from '@smui/circular-progress';
 	import type { TransactionResponse } from '../../../../server/src/types';
+	import { KQL_Me } from '$lib/graphql/_kitql/graphqlStores';
 
 	let senderAccountNumberField = { ...INPUT_FIELD };
 	let receiverAccountNumberField = { ...INPUT_FIELD };
@@ -19,6 +20,7 @@
 	<h1>Transfer</h1>
 	<form
 		on:submit|preventDefault={async () => {
+			const teller = await KQL_Me.query();
 			const response = await fetch('http://localhost:4001/transactions/transfer', {
 				method: 'POST',
 				mode: 'cors',
@@ -31,7 +33,7 @@
 					senderAccountNumber: senderAccountNumberField.content,
 					receiverAccountNumber: receiverAccountNumberField.content,
 					amount: amountField.content,
-					tellerId: 1
+					tellerId: teller.data?.me?.id
 				})
 			});
 			JSONResponse = await response.json();
@@ -71,8 +73,10 @@
 				senderCINField.content = '';
 				receiverCINField.content = '';
 				amountField.content = '';
+				setTimeout(() => (loading = false), 500);
+			} else {
+				loading = false;
 			}
-			setTimeout(() => (loading = false), 500);
 		}}
 	>
 		<Textfield
