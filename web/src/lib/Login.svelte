@@ -60,6 +60,7 @@
 		font-family: 'Roboto';
 		font-weight: 400;
 		text-align: center;
+		cursor: default;
 	}
 	h1 {
 		font-family: 'Roboto';
@@ -67,6 +68,7 @@
 		font-size: 3rem;
 		text-align: center;
 		color: #676778;
+		cursor: default;
 	}
 	form {
 		display: flex;

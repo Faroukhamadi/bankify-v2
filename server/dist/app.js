@@ -108,9 +108,11 @@ const main = async () => {
     });
     app.post('/transactions/deposit', async (req, res) => {
         console.log('we are in deposit');
+        console.log(req.body);
         const errors = (0, validateWithdrawOrDeposit_1.validateWithdrawOrDeposit)(req.body);
         if (errors) {
             res.json(errors);
+            console.log('errors: ', errors);
             return;
         }
         const { cin, accountNumber, amount, tellerId } = req.body;
@@ -170,7 +172,6 @@ const main = async () => {
         }
     });
     app.post('/transactions/transfer', async (req, res) => {
-        console.log('we are in transfer');
         const errors = (0, validaterTransfer_1.validateTransfer)(req.body);
         if (errors) {
             res.json(errors);
@@ -190,7 +191,7 @@ const main = async () => {
                 errors: [
                     {
                         message: `sender with specified cin doesn't exist`,
-                        field: 'cin',
+                        field: 'senderCin',
                     },
                 ],
             });
@@ -201,7 +202,7 @@ const main = async () => {
                 errors: [
                     {
                         message: `receiver with specified cin doesn't exist`,
-                        field: 'cin',
+                        field: 'senderCin',
                     },
                 ],
             });
@@ -250,7 +251,12 @@ const main = async () => {
         });
         transaction.id = 'tr:' + (0, uuid_1.v4)();
         senderAccount.balance -= amount;
-        receiverAccount.balance += amount;
+        if (typeof amount === 'number') {
+            receiverAccount.balance += amount;
+        }
+        else {
+            receiverAccount.balance += parseInt(amount);
+        }
         try {
             await (senderAccount === null || senderAccount === void 0 ? void 0 : senderAccount.save());
             await (receiverAccount === null || receiverAccount === void 0 ? void 0 : receiverAccount.save());

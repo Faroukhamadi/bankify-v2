@@ -135,9 +135,12 @@ const main = async () => {
 			res: Response<TransactionResponse>
 		) => {
 			console.log('we are in deposit');
+			console.log(req.body);
+
 			const errors = validateWithdrawOrDeposit(req.body);
 			if (errors) {
 				res.json(errors);
+				console.log('errors: ', errors);
 				return;
 			}
 			const { cin, accountNumber, amount, tellerId } = req.body;
@@ -310,7 +313,11 @@ const main = async () => {
 			transaction.id = 'tr:' + v4();
 
 			senderAccount!.balance -= amount;
-			receiverAccount!.balance += amount;
+			if (typeof amount === 'number') {
+				receiverAccount!.balance += amount;
+			} else {
+				receiverAccount!.balance += parseInt(amount);
+			}
 			try {
 				await senderAccount?.save();
 				await receiverAccount?.save();
