@@ -22,13 +22,19 @@
 	import About from '$lib/About.svelte';
 	import Tab, { Label } from '@smui/tab';
 	import TabBar from '@smui/tab-bar';
-	type NavState = 'Login' | 'About';
+	type NavState = 'Login' | 'About me';
 
 	let active: NavState = 'Login';
 </script>
 
+<svelte:head>
+	<title>Login</title>
+	<meta name="robots" content="noindex nofollow" />
+	<html lang="en" />
+</svelte:head>
+
 <div>
-	<TabBar tabs={['Login', 'About']} let:tab bind:active>
+	<TabBar tabs={['Login', 'About me']} let:tab bind:active>
 		<Tab {tab}>
 			<Label>{tab}</Label>
 		</Tab>

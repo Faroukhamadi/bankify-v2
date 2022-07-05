@@ -24,13 +24,18 @@
 	import TabBar from '@smui/tab-bar';
 	import Fab from '@smui/fab/src/Fab.svelte';
 	import { goto } from '$app/navigation';
-	import About from '$lib/About.svelte';
 	import Transaction from '$lib/transactions/Transaction.svelte';
 
 	type NavState = 'Search' | 'Register' | 'Transaction';
 
 	let active: NavState = 'Search';
 </script>
+
+<svelte:head>
+	<title>Home</title>
+	<meta name="robots" content="noindex nofollow" />
+	<html lang="en" />
+</svelte:head>
 
 <div>
 	<TabBar tabs={['Search', 'Register', 'Transaction']} let:tab bind:active>
