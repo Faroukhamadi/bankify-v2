@@ -9,7 +9,7 @@
 	let passwordField = { ...INPUT_FIELD };
 </script>
 
-<h1>Register Customer</h1>
+<h1>Create Teller</h1>
 <form
 	on:submit|preventDefault={async () => {
 		const res = await KQL_Register.mutate({
@@ -55,7 +55,7 @@
 		bind:value={passwordField.content}
 		label="Password"
 		required
-		type="text"
+		type="password"
 	/>
 	{#if passwordField.invalid}
 		<HelperText style="color: red; font-size: large;" validationMsg persistent slot="helper"
