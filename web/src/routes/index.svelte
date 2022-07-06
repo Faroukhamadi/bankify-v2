@@ -10,10 +10,17 @@
 		if (!res.data?.me) {
 			return {
 				redirect: '/login',
-				status: 302
+				status: 302,
+				props: {
+					role: res.data?.me?.role
+				}
 			};
 		}
-		return {};
+		return {
+			props: {
+				role: res.data?.me?.role
+			}
+		};
 	};
 </script>
 
@@ -25,8 +32,11 @@
 	import Fab from '@smui/fab/src/Fab.svelte';
 	import { goto } from '$app/navigation';
 	import Transaction from '$lib/transactions/Transaction.svelte';
+	import CreateTeller from '$lib/CreateTeller.svelte';
 
-	type NavState = 'Search' | 'Register' | 'Transaction';
+	type NavState = 'Search' | 'Register' | 'Transaction' | 'Create Teller';
+
+	export let role: 'CUSTOMER' | 'ADMIN';
 
 	let active: NavState = 'Search';
 </script>
@@ -37,20 +47,32 @@
 	<html lang="en" />
 </svelte:head>
 
-<div>
-	<TabBar tabs={['Search', 'Register', 'Transaction']} let:tab bind:active>
-		<Tab {tab}>
-			<Label>{tab}</Label>
-		</Tab>
-	</TabBar>
-</div>
+{#if role === 'ADMIN'}
+	<div>
+		<TabBar tabs={['Search', 'Register', 'Transaction', 'Create Teller']} let:tab bind:active>
+			<Tab {tab}>
+				<Label>{tab}</Label>
+			</Tab>
+		</TabBar>
+	</div>
+{:else}
+	<div>
+		<TabBar tabs={['Search', 'Register', 'Transaction']} let:tab bind:active>
+			<Tab {tab}>
+				<Label>{tab}</Label>
+			</Tab>
+		</TabBar>
+	</div>
+{/if}
 
 {#if active === 'Search'}
 	<Search />
 {:else if active === 'Register'}
 	<Register />
-{:else}
+{:else if active === 'Transaction'}
 	<Transaction />
+{:else}
+	<CreateTeller />
 {/if}
 
 <div

@@ -1,3 +1,4 @@
+import { PASSWORD_REGEX } from '../constants';
 import { UsernamePasswordInput } from './UsernamePasswordInput';
 
 export const validateRegister = (options: UsernamePasswordInput) => {
@@ -18,7 +19,6 @@ export const validateRegister = (options: UsernamePasswordInput) => {
 			},
 		];
 	}
-	// reset this in prod
 	// if (!PASSWORD_REGEX.test(options.password)) {
 	// 	return [
 	// 		{

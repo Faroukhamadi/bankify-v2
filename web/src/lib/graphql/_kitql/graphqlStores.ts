@@ -297,6 +297,55 @@ function KQL_LogoutStore() {
  */
 export const KQL_Logout = KQL_LogoutStore();
 
+function KQL_RegisterStore() {
+	const operationName = 'KQL_Register';
+	const operationType = ResponseResultType.Mutation;
+
+	// prettier-ignore
+	const { subscribe, set, update } = writable<RequestResult<Types.RegisterMutation, Types.RegisterMutationVariables>>({...defaultStoreValue, operationName, operationType});
+
+		async function mutateLocal(
+			params?: RequestParameters<Types.RegisterMutationVariables>
+		): Promise<RequestResult<Types.RegisterMutation, Types.RegisterMutationVariables>> {
+			let { fetch, variables } = params ?? {};
+
+			const storedVariables = get(KQL_Register).variables;
+			variables = variables ?? storedVariables;
+
+			update((c) => {
+				return { ...c, isFetching: true, status: RequestStatus.LOADING };
+			});
+
+			// prettier-ignore
+			const res = await kitQLClient.request<Types.RegisterMutation, Types.RegisterMutationVariables>({
+				skFetch: fetch,
+				document: Types.RegisterDocument,
+				variables, 
+				operationName, 
+				operationType, 
+				browser
+			});
+			const result = { ...res, isFetching: false, status: RequestStatus.DONE, variables };
+			set(result);
+			return result;
+		}
+
+	return {
+		subscribe,
+
+		/**
+		 * Can be used for SSR, but simpler option is `.queryLoad`
+		 * @returns fill this store & the cache
+		 */
+		mutate: mutateLocal,
+
+	};
+}
+/**
+ * KitQL Svelte Store with the latest `Register` Operation
+ */
+export const KQL_Register = KQL_RegisterStore();
+
 function KQL_HelloStore() {
 	const operationName = 'KQL_Hello';
 	const operationType = ResponseResultType.Query;

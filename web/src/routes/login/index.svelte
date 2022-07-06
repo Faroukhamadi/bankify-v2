@@ -19,12 +19,6 @@
 
 <script lang="ts">
 	import Login from '$lib/Login.svelte';
-	import About from '$lib/About.svelte';
-	import Tab, { Label } from '@smui/tab';
-	import TabBar from '@smui/tab-bar';
-	type NavState = 'Login' | 'About me';
-
-	let active: NavState = 'Login';
 </script>
 
 <svelte:head>
@@ -33,16 +27,15 @@
 	<html lang="en" />
 </svelte:head>
 
-<div>
-	<TabBar tabs={['Login', 'About me']} let:tab bind:active>
-		<Tab {tab}>
-			<Label>{tab}</Label>
-		</Tab>
-	</TabBar>
+<div class="container">
+	<Login />
 </div>
 
-{#if active === 'Login'}
-	<Login />
-{:else}
-	<About />
-{/if}
+<style>
+	.container {
+		height: 100vh;
+		display: flex;
+		justify-content: center;
+		margin-top: 8%;
+	}
+</style>

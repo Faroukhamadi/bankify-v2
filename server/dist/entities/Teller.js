@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Teller = void 0;
+exports.Teller = exports.TellerRole = void 0;
 const type_graphql_1 = require("type-graphql");
 const typeorm_1 = require("typeorm");
 const Transaction_1 = require("./Transaction");
@@ -17,7 +17,7 @@ var TellerRole;
 (function (TellerRole) {
     TellerRole["CUSTOMER"] = "customer";
     TellerRole["ADMIN"] = "admin";
-})(TellerRole || (TellerRole = {}));
+})(TellerRole = exports.TellerRole || (exports.TellerRole = {}));
 (0, type_graphql_1.registerEnumType)(TellerRole, {
     name: 'TellerRole',
 });

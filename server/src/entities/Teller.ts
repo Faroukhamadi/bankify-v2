@@ -10,7 +10,8 @@ import {
 	UpdateDateColumn,
 } from 'typeorm';
 import { Transaction } from './Transaction';
-enum TellerRole {
+
+export enum TellerRole {
 	CUSTOMER = 'customer',
 	ADMIN = 'admin',
 }
