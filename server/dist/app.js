@@ -21,7 +21,6 @@ const main = async () => {
         database: process.env.POSTGRES_DB_NAME,
         username: process.env.POSTGRES_USERNAME,
         password: process.env.POSTGRES_PASSWORD,
-        logging: 'all',
         synchronize: true,
         entities: [Customer_1.Customer, Account_1.Account, Teller_1.Teller, Transaction_1.Transaction],
     });
@@ -298,17 +297,42 @@ const main = async () => {
         return res.send(customers);
     });
     app.get('/transactions/:account_id', async (req, res) => {
-        const accountId = req.params.account_id;
-        console.log('the request url is: ', req.url);
-        console.log('account id is: ', accountId);
-        const transactions = await Transaction_1.Transaction.find({
+        const limit = parseInt(req.query.limit);
+        const page = parseInt(req.query.page);
+        const accountId = parseInt(req.params.account_id);
+        const startIndex = (page - 1) * limit;
+        const endIndex = page * limit;
+        const data = {};
+        const transactionsLength = await Transaction_1.Transaction.count({
             where: [
-                { customerAccountId: parseInt(accountId) },
-                { senderAccountId: parseInt(accountId) },
-                { receiverAccountId: parseInt(accountId) },
+                { customerAccountId: accountId },
+                { senderAccountId: accountId },
+                { receiverAccountId: accountId },
             ],
         });
-        return res.send(transactions);
+        if (endIndex < transactionsLength) {
+            data.next = {
+                page: page + 1,
+                limit: limit,
+            };
+        }
+        if (startIndex > 0) {
+            data.previous = {
+                page: page - 1,
+                limit: limit,
+            };
+        }
+        const transactions = await Transaction_1.Transaction.find({
+            take: limit,
+            skip: startIndex,
+            where: [
+                { customerAccountId: accountId },
+                { senderAccountId: accountId },
+                { receiverAccountId: accountId },
+            ],
+        });
+        data.results = transactions;
+        res.json(data);
     });
     app.post('/transactions', (_, _r) => {
     });

@@ -17,13 +17,22 @@ import { v4 } from 'uuid';
 import cors from 'cors';
 import { DEV_ORIGIN } from './constants';
 
+interface PaginatedQuery {
+	page: string;
+	limit: string;
+}
+
+interface PaginatedParams {
+	account_id: string;
+}
+
 const main = async () => {
 	const myDataSource = new DataSource({
 		type: 'postgres',
 		database: process.env.POSTGRES_DB_NAME,
 		username: process.env.POSTGRES_USERNAME,
 		password: process.env.POSTGRES_PASSWORD,
-		logging: 'all',
+		// logging: 'all',
 		synchronize: true,
 		entities: [Customer, Account, Teller, Transaction],
 	});
@@ -363,22 +372,56 @@ const main = async () => {
 		return res.send(customers);
 	});
 
-	app.get('/transactions/:account_id', async (req: Request, res: Response) => {
-		const accountId = req.params.account_id;
+	app.get(
+		'/transactions/:account_id',
+		async (
+			req: Request<PaginatedParams, {}, {}, PaginatedQuery>,
+			res: Response
+		) => {
+			const limit = parseInt(req.query.limit);
+			const page = parseInt(req.query.page);
+			const accountId = parseInt(req.params.account_id);
 
-		console.log('the request url is: ', req.url);
-		console.log('account id is: ', accountId);
+			const startIndex = (page - 1) * limit;
+			const endIndex = page * limit;
 
-		const transactions = await Transaction.find({
-			where: [
-				{ customerAccountId: parseInt(accountId) },
-				{ senderAccountId: parseInt(accountId) },
-				{ receiverAccountId: parseInt(accountId) },
-			],
-		});
+			const data: any = {};
 
-		return res.send(transactions);
-	});
+			const transactionsLength = await Transaction.count({
+				where: [
+					{ customerAccountId: accountId },
+					{ senderAccountId: accountId },
+					{ receiverAccountId: accountId },
+				],
+			});
+
+			if (endIndex < transactionsLength) {
+				data.next = {
+					page: page + 1,
+					limit: limit,
+				};
+			}
+
+			if (startIndex > 0) {
+				data.previous = {
+					page: page - 1,
+					limit: limit,
+				};
+			}
+
+			const transactions = await Transaction.find({
+				take: limit,
+				skip: startIndex,
+				where: [
+					{ customerAccountId: accountId },
+					{ senderAccountId: accountId },
+					{ receiverAccountId: accountId },
+				],
+			});
+			data.results = transactions;
+			res.json(data);
+		}
+	);
 
 	app.post('/transactions', (_: Request, _r: Response) => {
 		// here we will have logic to save a user
