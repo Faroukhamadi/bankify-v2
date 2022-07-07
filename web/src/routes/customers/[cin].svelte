@@ -5,12 +5,23 @@
 	import type { RequestResult } from '@kitql/client';
 	import type { CustomerQuery, Exact } from '$lib/graphql/_kitql/graphqlTypes';
 
-	export const load: Load = async ({ params }) => {
+	export const load: Load = async ({ params, fetch }) => {
+		// @ts-ignore
 		await KQL_Customer.queryLoad({ variables: { cin: params.cin }, fetch });
+		const res = get(KQL_Customer);
+		const accountId = res.data?.customer.customer?.accounts[0].id;
+		const data = await fetch(
+			`http://localhost:4001/transactions/${accountId}?${new URLSearchParams({
+				page: '1',
+				limit: '12'
+			})}`
+		);
+
 		return {
 			status: 200,
 			props: {
-				res: get(KQL_Customer)
+				res,
+				data: await data.json()
 			}
 		};
 	};
@@ -19,8 +30,27 @@
 <script lang="ts">
 	import List, { Item, Text, PrimaryText, SecondaryText } from '@smui/list';
 	import Button from '@smui/button/src/Button.svelte';
+	import DataTable, { Head, Body, Row, Cell, Pagination } from '@smui/data-table';
+	import IconButton from '@smui/icon-button';
 	import { Icon, Label } from '@smui/button';
+	import type { Transaction } from '../../../../server/src/entities/Transaction';
 
+	let start = 1;
+	let end = 5;
+	let currentPage = 1;
+	let lastPage = 5;
+
+	interface PrevOrNext {
+		page: number;
+		limit: number;
+	}
+	interface PaginatedData {
+		results: Array<Transaction>;
+		next?: PrevOrNext;
+		prev?: PrevOrNext;
+	}
+
+	export let data: PaginatedData;
 	export let res: RequestResult<
 		CustomerQuery,
 		Exact<{
@@ -29,7 +59,7 @@
 	>;
 </script>
 
-<h1>Customer Information:</h1>
+<h1>Customer Information</h1>
 <div>
 	<List twoLine nonInteractive>
 		<Item>
@@ -105,7 +135,62 @@
 			</Text>
 		</Item>
 	</List>
+	<h2>Customer Transactions</h2>
+	<DataTable table$aria-label="Todo list" style="width: 100%;">
+		<Head>
+			<Row>
+				<Cell>ID</Cell>
+				<Cell>Amount</Cell>
+				<Cell>Type</Cell>
+				<Cell>Transaction Date</Cell>
+				<Cell numeric>Customer ID</Cell>
+				<Cell numeric>Sender ID</Cell>
+				<Cell numeric>Receiver ID</Cell>
+			</Row>
+		</Head>
+		<Body>
+			{#each data.results as transaction (transaction.id)}
+				<!-- A deposit or withdraw -->
+				<Row>
+					<Cell>{transaction.id}</Cell>
+					<Cell>{transaction.amount}</Cell>
+					{#if transaction.id[0] === 'd'}
+						<Cell>Deposit</Cell>
+					{:else if transaction.id[0] === 'w'}
+						<Cell>Withdraw</Cell>
+					{:else}
+						<Cell>Transfer</Cell>
+					{/if}
+					<Cell>{new Date(transaction.createdAt.toString()).toLocaleDateString()}</Cell>
+					<Cell numeric>{transaction.customerAccountId ?? 'None'}</Cell>
+					<Cell numeric>{transaction.senderAccountId ?? 'None'}</Cell>
+					<Cell numeric>{transaction.receiverAccountId ?? 'None'}</Cell>
+				</Row>
+			{/each}
+		</Body>
 
+		<Pagination slot="paginate">
+			<svelte:fragment slot="total">
+				<!-- {start + 1}-{end} of {data.results.length} -->
+				{start + 1}-{end} of {10}
+			</svelte:fragment>
+
+			<IconButton
+				class="material-icons"
+				action="prev-page"
+				title="Prev page"
+				on:click={() => currentPage--}
+				disabled={currentPage === 0}>chevron_left</IconButton
+			>
+			<IconButton
+				class="material-icons"
+				action="next-page"
+				title="Next page"
+				on:click={() => currentPage++}
+				disabled={currentPage === lastPage}>chevron_right</IconButton
+			>
+		</Pagination>
+	</DataTable>
 	<a sveltekit:prefetch href="/">
 		<Button variant="raised">
 			<Icon class="material-icons">arrow_backward</Icon>
@@ -120,6 +205,10 @@
 		font-weight: 900;
 		font-size: 3rem;
 		text-align: center;
+		color: #676778;
+	}
+	h2 {
+		font-family: 'Roboto';
 		color: #676778;
 	}
 	a {

@@ -13,6 +13,7 @@ query Customer($cin: String!) {
 			updatedAt
 			deletedAt
 			accounts {
+				id
 				balance
 				accountNumber
 			}

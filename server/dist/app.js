@@ -284,25 +284,17 @@ const main = async () => {
     app.delete('/transactions', async (_, _res) => {
         return Transaction_1.Transaction.delete({ id: (0, typeorm_1.In)([3, 4, 5]) });
     });
-    app.get('/tellers', async (_req, res) => {
-        const tellers = await Teller_1.Teller.find();
-        res.json(tellers);
-    });
-    app.get('/customers', async (_req, res) => {
-        const customers = await Customer_1.Customer.find({
-            relations: {
-                accounts: true,
-            },
-        });
-        return res.send(customers);
-    });
     app.get('/transactions/:account_id', async (req, res) => {
         const limit = parseInt(req.query.limit);
         const page = parseInt(req.query.page);
         const accountId = parseInt(req.params.account_id);
         const startIndex = (page - 1) * limit;
         const endIndex = page * limit;
-        const data = {};
+        let data = {
+            results: [],
+            next: undefined,
+            prev: undefined,
+        };
         const transactionsLength = await Transaction_1.Transaction.count({
             where: [
                 { customerAccountId: accountId },
@@ -317,7 +309,7 @@ const main = async () => {
             };
         }
         if (startIndex > 0) {
-            data.previous = {
+            data.prev = {
                 page: page - 1,
                 limit: limit,
             };
@@ -333,12 +325,6 @@ const main = async () => {
         });
         data.results = transactions;
         res.json(data);
-    });
-    app.post('/transactions', (_, _r) => {
-    });
-    app.put('/transactions/:id', (_, _r) => {
-    });
-    app.delete('/transactions/:id', (_, _r) => {
     });
     app.listen(4001, () => {
         console.log('transaction service listening on port 4001');

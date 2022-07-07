@@ -17,6 +17,16 @@ import { v4 } from 'uuid';
 import cors from 'cors';
 import { DEV_ORIGIN } from './constants';
 
+interface PrevOrNext {
+	page: number;
+	limit: number;
+}
+interface PaginatedData {
+	results: Array<Transaction>;
+	next?: PrevOrNext;
+	prev?: PrevOrNext;
+}
+
 interface PaginatedQuery {
 	page: string;
 	limit: string;
@@ -358,20 +368,6 @@ const main = async () => {
 		return Transaction.delete({ id: In([3, 4, 5]) });
 	});
 
-	app.get('/tellers', async (_req, res) => {
-		const tellers = await Teller.find();
-		res.json(tellers);
-	});
-
-	app.get('/customers', async (_req: Request, res: Response) => {
-		const customers = await Customer.find({
-			relations: {
-				accounts: true,
-			},
-		});
-		return res.send(customers);
-	});
-
 	app.get(
 		'/transactions/:account_id',
 		async (
@@ -385,7 +381,11 @@ const main = async () => {
 			const startIndex = (page - 1) * limit;
 			const endIndex = page * limit;
 
-			const data: any = {};
+			let data: PaginatedData = {
+				results: [],
+				next: undefined,
+				prev: undefined,
+			};
 
 			const transactionsLength = await Transaction.count({
 				where: [
@@ -403,7 +403,7 @@ const main = async () => {
 			}
 
 			if (startIndex > 0) {
-				data.previous = {
+				data.prev = {
 					page: page - 1,
 					limit: limit,
 				};
@@ -422,18 +422,6 @@ const main = async () => {
 			res.json(data);
 		}
 	);
-
-	app.post('/transactions', (_: Request, _r: Response) => {
-		// here we will have logic to save a user
-	});
-
-	app.put('/transactions/:id', (_: Request, _r: Response) => {
-		// here we will have logic to update a user by a given user id
-	});
-
-	app.delete('/transactions/:id', (_: Request, _r: Response) => {
-		// here we will have logic to delete a user by a given user id
-	});
 
 	// start express server
 	app.listen(4001, () => {
