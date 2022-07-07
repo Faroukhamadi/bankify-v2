@@ -106,8 +106,6 @@ const main = async () => {
         }
     });
     app.post('/transactions/deposit', async (req, res) => {
-        console.log('we are in deposit');
-        console.log(req.body);
         const errors = (0, validateWithdrawOrDeposit_1.validateWithdrawOrDeposit)(req.body);
         if (errors) {
             res.json(errors);
@@ -168,6 +166,20 @@ const main = async () => {
             });
             return;
         }
+    });
+    app.get('/transactions/count/:account_id', async (req, res) => {
+        const accountId = parseInt(req.params.account_id);
+        const count = await Transaction_1.Transaction.count({
+            where: [
+                { customerAccountId: accountId },
+                { senderAccountId: accountId },
+                { receiverAccountId: accountId },
+            ],
+        });
+        console.log('count is: ', count);
+        return res.json({
+            count,
+        });
     });
     app.post('/transactions/transfer', async (req, res) => {
         const errors = (0, validaterTransfer_1.validateTransfer)(req.body);
@@ -324,7 +336,7 @@ const main = async () => {
             ],
         });
         data.results = transactions;
-        res.json(data);
+        return res.json(data);
     });
     app.listen(4001, () => {
         console.log('transaction service listening on port 4001');

@@ -153,9 +153,6 @@ const main = async () => {
 			req: Request<{}, {}, WithdrawOrDepositInput>,
 			res: Response<TransactionResponse>
 		) => {
-			console.log('we are in deposit');
-			console.log(req.body);
-
 			const errors = validateWithdrawOrDeposit(req.body);
 			if (errors) {
 				res.json(errors);
@@ -221,6 +218,26 @@ const main = async () => {
 				});
 				return;
 			}
+		}
+	);
+
+	app.get(
+		'/transactions/count/:account_id',
+		async (req: Request<PaginatedParams>, res: Response) => {
+			const accountId = parseInt(req.params.account_id);
+			const count = await Transaction.count({
+				where: [
+					{ customerAccountId: accountId },
+					{ senderAccountId: accountId },
+					{ receiverAccountId: accountId },
+				],
+			});
+
+			console.log('count is: ', count);
+
+			return res.json({
+				count,
+			});
 		}
 	);
 
@@ -419,10 +436,9 @@ const main = async () => {
 				],
 			});
 			data.results = transactions;
-			res.json(data);
+			return res.json(data);
 		}
 	);
-
 	// start express server
 	app.listen(4001, () => {
 		console.log('transaction service listening on port 4001');

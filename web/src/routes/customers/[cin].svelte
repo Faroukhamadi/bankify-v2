@@ -10,18 +10,23 @@
 		await KQL_Customer.queryLoad({ variables: { cin: params.cin }, fetch });
 		const res = get(KQL_Customer);
 		const accountId = res.data?.customer.customer?.accounts[0].id;
+
+		// later check if this customer even has transactions
 		const data = await fetch(
 			`http://localhost:4001/transactions/${accountId}?${new URLSearchParams({
 				page: '1',
-				limit: '12'
+				limit: '10'
 			})}`
 		);
+
+		const transactionCount = await fetch(`http://localhost:4001/transactions/count/${accountId}`);
 
 		return {
 			status: 200,
 			props: {
 				res,
-				data: await data.json()
+				data: await data.json(),
+				transactionCount: await transactionCount.json()
 			}
 		};
 	};
@@ -35,8 +40,6 @@
 	import { Icon, Label } from '@smui/button';
 	import type { Transaction } from '../../../../server/src/entities/Transaction';
 
-	let start = 1;
-	let end = 5;
 	let currentPage = 1;
 	let lastPage = 5;
 
@@ -51,6 +54,9 @@
 	}
 
 	export let data: PaginatedData;
+	export let transactionCount: {
+		count: number;
+	};
 	export let res: RequestResult<
 		CustomerQuery,
 		Exact<{
@@ -153,7 +159,7 @@
 				<!-- A deposit or withdraw -->
 				<Row>
 					<Cell>{transaction.id}</Cell>
-					<Cell>{transaction.amount}</Cell>
+					<Cell>{transaction.amount + ' D.T'}</Cell>
 					{#if transaction.id[0] === 'd'}
 						<Cell>Deposit</Cell>
 					{:else if transaction.id[0] === 'w'}
@@ -171,22 +177,34 @@
 
 		<Pagination slot="paginate">
 			<svelte:fragment slot="total">
-				<!-- {start + 1}-{end} of {data.results.length} -->
-				{start + 1}-{end} of {10}
+				1 - 10 of {transactionCount.count}
 			</svelte:fragment>
 
 			<IconButton
 				class="material-icons"
 				action="prev-page"
 				title="Prev page"
-				on:click={() => currentPage--}
+				on:click={async () => {
+					currentPage--;
+				}}
 				disabled={currentPage === 0}>chevron_left</IconButton
 			>
 			<IconButton
 				class="material-icons"
 				action="next-page"
 				title="Next page"
-				on:click={() => currentPage++}
+				on:click={async () => {
+					currentPage++;
+					let response = await fetch(
+						`http://localhost:4001/transactions/${
+							res.data?.customer.customer?.accounts[0].id
+						}?${new URLSearchParams({
+							page: currentPage.toString(),
+							limit: '10'
+						})}`
+					);
+					data = await response.json();
+				}}
 				disabled={currentPage === lastPage}>chevron_right</IconButton
 			>
 		</Pagination>
