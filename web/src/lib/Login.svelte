@@ -30,9 +30,8 @@
 			label="Username"
 			required
 			type="text"
+			input$maxlength={20}
 		/>
-		<!-- might use this for validation -->
-		<!-- input$maxlength={10} -->
 		{#if usernameField.invalid}
 			<HelperText style="color: red; font-size: large;" validationMsg persistent slot="helper"
 				>{usernameField.errorText}</HelperText
@@ -45,6 +44,7 @@
 			label="Password"
 			required
 			type="password"
+			input$maxlength={20}
 		/>
 		{#if passwordField.invalid}
 			<HelperText style="color: red; font-size: large;" validationMsg persistent slot="helper"

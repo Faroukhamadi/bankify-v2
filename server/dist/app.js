@@ -67,7 +67,7 @@ const main = async () => {
             return;
         }
         const account = customer === null || customer === void 0 ? void 0 : customer.accounts.find((a) => a['accountNumber'] === accountNumber);
-        if (account.balance - amount < 0) {
+        if (account.balance < amount) {
             res.json({
                 errors: [
                     {
@@ -112,7 +112,6 @@ const main = async () => {
         const errors = (0, validateWithdrawOrDeposit_1.validateWithdrawOrDeposit)(req.body);
         if (errors) {
             res.json(errors);
-            console.log('errors: ', errors);
             return;
         }
         const { cin, accountNumber, amount, tellerId } = req.body;
@@ -232,7 +231,7 @@ const main = async () => {
         }
         const senderAccount = sender === null || sender === void 0 ? void 0 : sender.accounts.find((a) => a['accountNumber'] === senderAccountNumber);
         const receiverAccount = receiver === null || receiver === void 0 ? void 0 : receiver.accounts.find((a) => a['accountNumber'] === receiverAccountNumber);
-        if (senderAccount.balance - amount < 0) {
+        if (senderAccount.balance < amount) {
             res.json({
                 errors: [
                     {
@@ -298,11 +297,18 @@ const main = async () => {
         });
         return res.send(customers);
     });
-    app.get('/transactions/:id', async (req, res) => {
-        const transaction = await Transaction_1.Transaction.findOneBy({
-            id: req.params.id,
+    app.get('/transactions/:account_id', async (req, res) => {
+        const accountId = req.params.account_id;
+        console.log('the request url is: ', req.url);
+        console.log('account id is: ', accountId);
+        const transactions = await Transaction_1.Transaction.find({
+            where: [
+                { customerAccountId: parseInt(accountId) },
+                { senderAccountId: parseInt(accountId) },
+                { receiverAccountId: parseInt(accountId) },
+            ],
         });
-        return res.send(transaction);
+        return res.send(transactions);
     });
     app.post('/transactions', (_, _r) => {
     });

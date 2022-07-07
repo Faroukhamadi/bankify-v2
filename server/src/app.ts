@@ -85,7 +85,7 @@ const main = async () => {
 			const account = customer?.accounts.find(
 				(a) => a['accountNumber'] === accountNumber
 			);
-			if (account!.balance - amount < 0) {
+			if (account!.balance < amount) {
 				res.json({
 					errors: [
 						{
@@ -140,7 +140,6 @@ const main = async () => {
 			const errors = validateWithdrawOrDeposit(req.body);
 			if (errors) {
 				res.json(errors);
-				console.log('errors: ', errors);
 				return;
 			}
 			const { cin, accountNumber, amount, tellerId } = req.body;
@@ -291,7 +290,7 @@ const main = async () => {
 			const receiverAccount = receiver?.accounts.find(
 				(a) => a['accountNumber'] === receiverAccountNumber
 			);
-			if (senderAccount!.balance - amount < 0) {
+			if (senderAccount!.balance < amount) {
 				res.json({
 					errors: [
 						{
@@ -364,11 +363,21 @@ const main = async () => {
 		return res.send(customers);
 	});
 
-	app.get('/transactions/:id', async (req: Request, res: Response) => {
-		const transaction = await Transaction.findOneBy({
-			id: req.params.id,
+	app.get('/transactions/:account_id', async (req: Request, res: Response) => {
+		const accountId = req.params.account_id;
+
+		console.log('the request url is: ', req.url);
+		console.log('account id is: ', accountId);
+
+		const transactions = await Transaction.find({
+			where: [
+				{ customerAccountId: parseInt(accountId) },
+				{ senderAccountId: parseInt(accountId) },
+				{ receiverAccountId: parseInt(accountId) },
+			],
 		});
-		return res.send(transaction);
+
+		return res.send(transactions);
 	});
 
 	app.post('/transactions', (_: Request, _r: Response) => {
