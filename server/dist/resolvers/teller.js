@@ -133,7 +133,6 @@ let TellerResolver = class TellerResolver {
         res.clearCookie(constants_1.COOKIE_NAME);
         return new Promise((resolve) => req.session.destroy((err) => {
             if (err) {
-                console.log(err);
                 resolve(false);
                 return;
             }

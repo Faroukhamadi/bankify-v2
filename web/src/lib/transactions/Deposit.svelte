@@ -35,7 +35,6 @@
 			});
 			JSONResponse = await response.json();
 			if (JSONResponse.errors && JSONResponse.errors[0].field === 'cin') {
-				console.log('cin error hello');
 				CINField.invalid = true;
 				CINField.errorText = JSONResponse.errors[0].message;
 			} else {

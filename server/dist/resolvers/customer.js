@@ -139,12 +139,10 @@ let CustomerResolver = class CustomerResolver {
                 },
             ],
         });
-        console.log('customer accounts: ', customer.accounts);
         try {
             await customer.save();
         }
         catch (err) {
-            console.log('err', err);
             if (err.code === '23505' && err.detail.includes('cin')) {
                 return {
                     errors: [

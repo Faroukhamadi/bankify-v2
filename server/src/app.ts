@@ -65,9 +65,6 @@ const main = async () => {
 			req: Request<{}, {}, WithdrawOrDepositInput>,
 			res: Response<TransactionResponse>
 		) => {
-			console.log('we are in withdraw');
-			console.log('this is the data we got from the browser: ', req.body);
-
 			const errors = validateWithdrawOrDeposit(req.body);
 			if (errors) {
 				res.json(errors);
@@ -133,7 +130,6 @@ const main = async () => {
 				});
 				return;
 			} catch (err) {
-				console.log('unexpected err:', err);
 				res.json({
 					errors: [
 						{
@@ -207,7 +203,6 @@ const main = async () => {
 				});
 				return;
 			} catch (err) {
-				console.log('unexpected err:', err);
 				res.json({
 					errors: [
 						{
@@ -360,7 +355,6 @@ const main = async () => {
 				});
 				return;
 			} catch (err) {
-				console.log('unexpected err:', err);
 				res.json({
 					errors: [
 						{
