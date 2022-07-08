@@ -52,11 +52,11 @@
 	>;
 
 	let currentPage = 1;
-	let lastPage = Math.round(transactionCount.count / 10);
+	let start = 1;
+	let end = 10;
 	let loadingNext = false;
 	let loadingPrev = false;
 	let transactionsLeft: number = transactionCount.count;
-	console.log('data results: ', data.results);
 
 	interface PrevOrNext {
 		page: number;
@@ -180,7 +180,7 @@
 
 		<Pagination slot="paginate">
 			<svelte:fragment slot="total">
-				1 - 10 of {transactionCount.count}
+				{start} - {end} of {transactionCount.count}
 			</svelte:fragment>
 
 			<IconButton
@@ -201,6 +201,13 @@
 
 					data = await response.json();
 					transactionsLeft += 10;
+					start -= 10;
+					if (end == transactionCount.count) {
+						end -= end % 10;
+					} else {
+						end -= 10;
+					}
+
 					loadingPrev = false;
 				}}
 				disabled={currentPage === 1 || loadingPrev}>chevron_left</IconButton
@@ -223,6 +230,13 @@
 					data = await response.json();
 
 					transactionsLeft -= 10;
+					start += 10;
+
+					if (end + 10 <= transactionCount.count) {
+						end += 10;
+					} else {
+						end = transactionCount.count;
+					}
 
 					loadingNext = false;
 				}}
