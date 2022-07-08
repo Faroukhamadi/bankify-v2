@@ -40,19 +40,6 @@
 	import { Icon, Label } from '@smui/button';
 	import type { Transaction } from '../../../../server/src/entities/Transaction';
 
-	let currentPage = 1;
-	let lastPage = 5;
-
-	interface PrevOrNext {
-		page: number;
-		limit: number;
-	}
-	interface PaginatedData {
-		results: Array<Transaction>;
-		next?: PrevOrNext;
-		prev?: PrevOrNext;
-	}
-
 	export let data: PaginatedData;
 	export let transactionCount: {
 		count: number;
@@ -63,6 +50,23 @@
 			cin: string;
 		}>
 	>;
+
+	let currentPage = 1;
+	let lastPage = Math.round(transactionCount.count / 10);
+	let loadingNext = false;
+	let loadingPrev = false;
+	let transactionsLeft: number = transactionCount.count;
+	console.log('data results: ', data.results);
+
+	interface PrevOrNext {
+		page: number;
+		limit: number;
+	}
+	interface PaginatedData {
+		results: Array<Transaction>;
+		next?: PrevOrNext;
+		prev?: PrevOrNext;
+	}
 </script>
 
 <h1>Customer Information</h1>
@@ -149,14 +153,13 @@
 				<Cell>Amount</Cell>
 				<Cell>Type</Cell>
 				<Cell>Transaction Date</Cell>
-				<Cell numeric>Customer ID</Cell>
-				<Cell numeric>Sender ID</Cell>
-				<Cell numeric>Receiver ID</Cell>
+				<Cell numeric>Customer CIN</Cell>
+				<Cell numeric>Sender CIN</Cell>
+				<Cell numeric>Receiver CIN</Cell>
 			</Row>
 		</Head>
 		<Body>
 			{#each data.results as transaction (transaction.id)}
-				<!-- A deposit or withdraw -->
 				<Row>
 					<Cell>{transaction.id}</Cell>
 					<Cell>{transaction.amount + ' D.T'}</Cell>
@@ -168,9 +171,9 @@
 						<Cell>Transfer</Cell>
 					{/if}
 					<Cell>{new Date(transaction.createdAt.toString()).toLocaleDateString()}</Cell>
-					<Cell numeric>{transaction.customerAccountId ?? 'None'}</Cell>
-					<Cell numeric>{transaction.senderAccountId ?? 'None'}</Cell>
-					<Cell numeric>{transaction.receiverAccountId ?? 'None'}</Cell>
+					<Cell numeric>{transaction?.customerAccount?.customer.cin ?? 'None'}</Cell>
+					<Cell numeric>{transaction.senderAccount?.customer.cin ?? 'None'}</Cell>
+					<Cell numeric>{transaction.receiverAccount?.customer.cin ?? 'None'}</Cell>
 				</Row>
 			{/each}
 		</Body>
@@ -186,8 +189,21 @@
 				title="Prev page"
 				on:click={async () => {
 					currentPage--;
+					loadingPrev = true;
+					let response = await fetch(
+						`http://localhost:4001/transactions/${
+							res.data?.customer.customer?.accounts[0].id
+						}?${new URLSearchParams({
+							page: currentPage.toString(),
+							limit: '10'
+						})}`
+					);
+
+					data = await response.json();
+					transactionsLeft += 10;
+					loadingPrev = false;
 				}}
-				disabled={currentPage === 0}>chevron_left</IconButton
+				disabled={currentPage === 1 || loadingPrev}>chevron_left</IconButton
 			>
 			<IconButton
 				class="material-icons"
@@ -195,6 +211,7 @@
 				title="Next page"
 				on:click={async () => {
 					currentPage++;
+					loadingNext = true;
 					let response = await fetch(
 						`http://localhost:4001/transactions/${
 							res.data?.customer.customer?.accounts[0].id
@@ -204,8 +221,12 @@
 						})}`
 					);
 					data = await response.json();
+
+					transactionsLeft -= 10;
+
+					loadingNext = false;
 				}}
-				disabled={currentPage === lastPage}>chevron_right</IconButton
+				disabled={transactionsLeft <= 10 || loadingNext}>chevron_right</IconButton
 			>
 		</Pagination>
 	</DataTable>
@@ -231,5 +252,8 @@
 	}
 	a {
 		text-decoration: none;
+	}
+	* {
+		cursor: default;
 	}
 </style>

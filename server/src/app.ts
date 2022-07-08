@@ -233,8 +233,6 @@ const main = async () => {
 				],
 			});
 
-			console.log('count is: ', count);
-
 			return res.json({
 				count,
 			});
@@ -429,10 +427,21 @@ const main = async () => {
 			const transactions = await Transaction.find({
 				take: limit,
 				skip: startIndex,
+				order: {
+					createdAt: 'DESC',
+				},
 				where: [
 					{ customerAccountId: accountId },
 					{ senderAccountId: accountId },
 					{ receiverAccountId: accountId },
+				],
+				relations: [
+					'customerAccount',
+					'customerAccount.customer',
+					'senderAccount',
+					'senderAccount.customer',
+					'receiverAccount',
+					'receiverAccount.customer',
 				],
 			});
 			data.results = transactions;
