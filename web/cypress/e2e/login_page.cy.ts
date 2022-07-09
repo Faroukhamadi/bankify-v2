@@ -25,12 +25,12 @@ describe('The Login Page', () => {
 		cy.get('.password').clear();
 	});
 
-	it('logs in and visits the home page', () => {
-		cy.get('.username').type('liz');
-		cy.get('.password').should('not.be.disabled').type('liz');
+	// it('logs in and visits the home page', () => {
+	// 	cy.get('.username').type('liz');
+	// 	cy.get('.password').should('not.be.disabled').type('liz');
 
-		cy.get('.mdc-button__ripple').click();
-	});
+	// 	cy.get('.mdc-button__ripple').click();
+	// });
 });
 
 export {};
