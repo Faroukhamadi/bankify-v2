@@ -24,6 +24,7 @@
 		}}
 	>
 		<Textfield
+			input$class="username"
 			style="min-width: 30rem;"
 			variant="outlined"
 			bind:value={usernameField.content}
@@ -38,6 +39,7 @@
 			>
 		{/if}
 		<Textfield
+			input$class="password"
 			style="min-width: 30rem;"
 			variant="outlined"
 			bind:value={passwordField.content}

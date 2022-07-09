@@ -228,6 +228,9 @@ const main = async () => {
 				],
 			});
 
+			console.log('getting count');
+			console.log('this is accountId: ', accountId);
+
 			return res.json({
 				count,
 			});
@@ -385,7 +388,12 @@ const main = async () => {
 		) => {
 			const limit = parseInt(req.query.limit);
 			const page = parseInt(req.query.page);
+			console.log(
+				'this is accountId before getting parsed: ',
+				req.params.account_id
+			);
 			const accountId = parseInt(req.params.account_id);
+			console.log('this is accountId after getting parsed: ', accountId);
 
 			const startIndex = (page - 1) * limit;
 			const endIndex = page * limit;
@@ -395,6 +403,8 @@ const main = async () => {
 				next: undefined,
 				prev: undefined,
 			};
+
+			console.log('getting transactions');
 
 			const transactionsLength = await Transaction.count({
 				where: [

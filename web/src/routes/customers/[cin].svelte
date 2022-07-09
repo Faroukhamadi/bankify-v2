@@ -7,17 +7,20 @@
 
 	export const load: Load = async ({ params, fetch }) => {
 		// @ts-ignore
+		// TODO: fix favicon going into params.cin
 		await KQL_Customer.queryLoad({ variables: { cin: params.cin }, fetch });
+		console.log('params: ', params);
 		const res = get(KQL_Customer);
-		const accountId = res.data?.customer.customer?.accounts[0].id;
+		console.log(res);
+		console.log(res.errors);
+
+		const accountId = res.data?.customer.customer?.accounts[0]!.id;
 
 		// later check if this customer even has transactions
-		const data = await fetch(
-			`http://localhost:4001/transactions/${accountId}?${new URLSearchParams({
-				page: '1',
-				limit: '10'
-			})}`
-		);
+		const url = `http://localhost:4001/transactions/${accountId}?page=1&limit=10`;
+		console.log('this is the url we are sending: ', url);
+
+		const data = await fetch(url);
 
 		const transactionCount = await fetch(`http://localhost:4001/transactions/count/${accountId}`);
 
@@ -244,7 +247,7 @@
 			>
 		</Pagination>
 	</DataTable>
-	<a sveltekit:prefetch href="/">
+	<a href="/">
 		<Button variant="raised">
 			<Icon class="material-icons">arrow_backward</Icon>
 			<Label>HOME</Label>
