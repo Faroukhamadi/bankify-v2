@@ -24,19 +24,25 @@ const customer_1 = require("./resolvers/customer");
 const account_1 = require("./resolvers/account");
 const apollo_server_core_1 = require("apollo-server-core");
 const main = async () => {
+    console.log('host: ', process.env.POSTGRES_HOST);
+    console.log('redis host: ', process.env.REDIS_HOST);
     const myDataSource = new typeorm_1.DataSource({
         type: 'postgres',
-        database: process.env.POSTGRES_DB_NAME,
-        username: process.env.POSTGRES_USERNAME,
-        password: process.env.POSTGRES_PASSWORD,
+        host: process.env.POSTGRES_HOST || undefined,
+        database: process.env.POSTGRES_DB || process.env.POSTGRES_DB_NAME,
+        username: process.env.POSTGRES_USER || process.env.POSTGRES_USERNAME,
+        password: process.env.POSTGRES_PASSWORD || process.env.POSTGRES_PASSWORD,
         logging: 'all',
         synchronize: true,
         entities: [Customer_1.Customer, Account_1.Account, Teller_1.Teller, Transaction_1.Transaction],
     });
     await myDataSource.initialize();
+    console.log('database: ', myDataSource.driver.database);
     const app = (0, express_1.default)();
     const RedisStore = (0, connect_redis_1.default)(express_session_1.default);
-    const redis = new ioredis_1.default();
+    const redis = new ioredis_1.default({
+        host: process.env.REDIS_HOST || undefined,
+    });
     app.use((0, cors_1.default)({
         origin: constants_1.DEV_ORIGIN,
         credentials: true,

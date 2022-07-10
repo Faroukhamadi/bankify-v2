@@ -1,0 +1,43 @@
+version: "3.8"
+services:
+  app:
+    build: ./server
+    depends_on:
+      - db
+      - cache
+    ports:
+      - "4000:8080"
+      # - "4001:8081"
+    volumes:
+      - ./server:/usr/src/app/
+      - /usr/src/app/node_modules
+    environment:
+      - REDIS_HOST=cache
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=root
+      - POSTGRES_HOST=db
+
+  db:
+    image: postgres:14.1-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=root
+      - POSTGRES_HOST=db
+    ports:
+      - "5432:5432"
+
+  cache:
+    image: redis:7.0.2-alpine
+    restart: always
+    environment:
+      - REDIS_HOST=cache
+    ports:
+      - "6379:6379"
+    volumes:
+      - cache:/data
+volumes:
+  cache:
+    driver: local

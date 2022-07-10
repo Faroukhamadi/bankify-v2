@@ -27,21 +27,28 @@ declare module 'express-session' {
 }
 
 const main = async () => {
+	console.log('host: ', process.env.POSTGRES_HOST);
+	console.log('redis host: ', process.env.REDIS_HOST);
 	const myDataSource = new DataSource({
 		type: 'postgres',
-		database: process.env.POSTGRES_DB_NAME,
-		username: process.env.POSTGRES_USERNAME,
-		password: process.env.POSTGRES_PASSWORD,
+		host: process.env.POSTGRES_HOST || undefined,
+		database: process.env.POSTGRES_DB || process.env.POSTGRES_DB_NAME,
+		username: process.env.POSTGRES_USER || process.env.POSTGRES_USERNAME,
+		password: process.env.POSTGRES_PASSWORD || process.env.POSTGRES_PASSWORD,
 		logging: 'all',
 		synchronize: true,
 		entities: [Customer, Account, Teller, Transaction],
 	});
 	await myDataSource.initialize();
 
+	console.log('database: ', myDataSource.driver.database);
+
 	const app = express();
 
 	const RedisStore = connectRedis(session);
-	const redis = new Redis();
+	const redis = new Redis({
+		host: process.env.REDIS_HOST || undefined,
+	});
 
 	app.use(
 		cors({
