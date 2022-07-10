@@ -40,6 +40,7 @@ const main = async () => {
 		entities: [Customer, Account, Teller, Transaction],
 	});
 	await myDataSource.initialize();
+	console.log('yikes');
 
 	console.log('database: ', myDataSource.driver.database);
 

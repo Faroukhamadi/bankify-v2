@@ -6,7 +6,8 @@ services:
       - db
       - cache
     ports:
-      - "4000:8080"
+      - "8080:4000"
+      # - "4000:8080"
       # - "4001:8081"
     volumes:
       - ./server:/usr/src/app/

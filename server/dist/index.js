@@ -37,6 +37,7 @@ const main = async () => {
         entities: [Customer_1.Customer, Account_1.Account, Teller_1.Teller, Transaction_1.Transaction],
     });
     await myDataSource.initialize();
+    console.log('yikes');
     console.log('database: ', myDataSource.driver.database);
     const app = (0, express_1.default)();
     const RedisStore = (0, connect_redis_1.default)(express_session_1.default);
