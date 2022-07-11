@@ -6,9 +6,7 @@ services:
       - db
       - cache
     ports:
-      - "8080:4000"
-      # - "4000:8080"
-      # - "4001:8081"
+      - "4000:4000"
     volumes:
       - ./server:/usr/src/app/
       - /usr/src/app/node_modules
