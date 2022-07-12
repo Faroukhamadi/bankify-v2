@@ -22,7 +22,8 @@ services:
     volumes:
       - cache:/data
   app:
-    build: ./server
+    container_name: "app"
+    image: faroukhamadi/bankify-backend:latest
     depends_on:
       - db
       - cache
