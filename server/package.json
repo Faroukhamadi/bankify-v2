@@ -6,8 +6,10 @@
   "scripts": {
     "watch": "tsc -w",
     "dev": "nodemon dist/index.js",
-    "start-service-transaction": "nodemon dist/app.js",
-    "start": "node dist/index.js"
+    "prod": "node dist/index.js",
+    "start-service-transaction-dev": "nodemon dist/app.js",
+    "start-service-transaction": "node dist/app.js",
+    "start": "npm run start-service-transaction & npm run prod"
   },
   "keywords": [],
   "author": "",

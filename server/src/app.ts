@@ -39,11 +39,12 @@ interface PaginatedParams {
 const main = async () => {
 	const myDataSource = new DataSource({
 		type: 'postgres',
-		database: process.env.POSTGRES_DB_NAME,
-		username: process.env.POSTGRES_USERNAME,
-		password: process.env.POSTGRES_PASSWORD,
+		host: process.env.POSTGRES_HOST || undefined,
+		database: process.env.POSTGRES_DB || process.env.POSTGRES_DB_NAME,
+		username: process.env.POSTGRES_USER || process.env.POSTGRES_USERNAME,
+		password: process.env.POSTGRES_PASSWORD || process.env.POSTGRES_PASSWORD,
 		logging: 'all',
-		synchronize: true,
+		// synchronize: true,
 		entities: [Customer, Account, Teller, Transaction],
 	});
 
@@ -182,6 +183,20 @@ const main = async () => {
 				});
 				return;
 			}
+
+			// this exists for testing purposes because in dev user should be logged in to do this
+			const teller = await Teller.findOneBy({ id: tellerId });
+			if (!teller) {
+				res.json({
+					errors: [
+						{
+							message: `teller with specified id doesn't exist`,
+							field: 'tellerId',
+						},
+					],
+				});
+			}
+
 			const account = customer?.accounts.find(
 				(a) => a['accountNumber'] === accountNumber
 			);

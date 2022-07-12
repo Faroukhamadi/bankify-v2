@@ -18,9 +18,10 @@ const constants_1 = require("./constants");
 const main = async () => {
     const myDataSource = new typeorm_1.DataSource({
         type: 'postgres',
-        database: process.env.POSTGRES_DB_NAME,
-        username: process.env.POSTGRES_USERNAME,
-        password: process.env.POSTGRES_PASSWORD,
+        host: process.env.POSTGRES_HOST || undefined,
+        database: process.env.POSTGRES_DB || process.env.POSTGRES_DB_NAME,
+        username: process.env.POSTGRES_USER || process.env.POSTGRES_USERNAME,
+        password: process.env.POSTGRES_PASSWORD || process.env.POSTGRES_PASSWORD,
         logging: 'all',
         synchronize: true,
         entities: [Customer_1.Customer, Account_1.Account, Teller_1.Teller, Transaction_1.Transaction],
