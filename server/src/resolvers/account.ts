@@ -33,59 +33,59 @@ class CredentialsResponse {
 @Resolver()
 export class AccountResolver {
 	@Mutation(() => CredentialsResponse, { nullable: false })
-	async createAccount(
-		@Arg('userId', () => Int) userId: number
-	): Promise<CredentialsResponse> {
-		const account = Account.create({
-			accountNumber: '123456789123',
-		});
+	// TODO: reset this if it breaks anything and figure out why it works
+	// async createAccount(
+	// 	@Arg('userId', () => Int) userId: number
+	// ): Promise<CredentialsResponse> {
+	// 	const account = Account.create({
+	// 		accountNumber: '123456789123',
+	// 	});
 
-		const customer = await Customer.findOne({
-			where: { id: userId },
-			loadRelationIds: true,
-		});
+	// 	const customer = await Customer.findOne({
+	// 		where: { id: userId },
+	// 		loadRelationIds: true,
+	// 	});
 
-		if (!customer) {
-			return {
-				errors: [
-					{
-						message: 'user not found',
-					},
-				],
-			};
-		}
+	// 	if (!customer) {
+	// 		return {
+	// 			errors: [
+	// 				{
+	// 					message: 'user not found',
+	// 				},
+	// 			],
+	// 		};
+	// 	}
 
-		if (account.customer) {
-			return {
-				errors: [
-					{
-						message: 'user already has an account',
-					},
-				],
-			};
-		}
+	// 	if (account.customer) {
+	// 		return {
+	// 			errors: [
+	// 				{
+	// 					message: 'user already has an account',
+	// 				},
+	// 			],
+	// 		};
+	// 	}
 
-		try {
-			await account.save();
-		} catch (error) {
-			return {
-				errors: [
-					{
-						message: 'I dont know what is causing this error',
-					},
-				],
-			};
-		}
+	// 	try {
+	// 		await account.save();
+	// 	} catch (error) {
+	// 		return {
+	// 			errors: [
+	// 				{
+	// 					message: 'I dont know what is causing this error',
+	// 				},
+	// 			],
+	// 		};
+	// 	}
 
-		account.customer;
+	// 	account.customer;
 
-		await account.save();
-		return {
-			account,
-			customer,
-		};
-	}
-
+	// 	await account.save();
+	// 	return {
+	// 		account,
+	// 		customer,
+	// 	};
+	// }
 	@Query(() => Int, { nullable: true })
 	async balance(
 		@Arg('userId', () => Int) userId: number,

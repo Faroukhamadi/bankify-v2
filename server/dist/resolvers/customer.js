@@ -17,6 +17,7 @@ const Customer_1 = require("../entities/Customer");
 const teller_1 = require("./teller");
 const type_graphql_1 = require("type-graphql");
 const constants_1 = require("../constants");
+const Account_1 = require("src/entities/Account");
 let CustomerResponse = class CustomerResponse {
 };
 __decorate([
@@ -58,6 +59,18 @@ CustomerInput = __decorate([
 exports.CustomerInput = CustomerInput;
 let CustomerResolver = class CustomerResolver {
     async createCustomer({ firstName, lastName, cin, phone, accountNumber }, {}) {
+        let intAccountNumber = Math.floor(Math.random() * 999999999999) + 100000000000;
+        let account = await Account_1.Account.findOneBy({
+            accountNumber: intAccountNumber.toString(),
+        });
+        while (account) {
+            intAccountNumber =
+                Math.floor(Math.random() * 999999999999) + 100000000000;
+            account = await Account_1.Account.findOneBy({
+                accountNumber: intAccountNumber.toString(),
+            });
+        }
+        accountNumber = intAccountNumber.toString();
         if (firstName.length <= 2) {
             return {
                 errors: [
