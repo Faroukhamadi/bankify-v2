@@ -8,7 +8,7 @@ import {
 	Query,
 	Resolver,
 } from 'type-graphql';
-import { In } from 'typeorm';
+import { DeleteResult, In } from 'typeorm';
 import { MyContext } from '../types';
 import argon2 from 'argon2';
 import { COOKIE_NAME } from '../constants';
@@ -135,8 +135,10 @@ export class TellerResolver {
 	}
 
 	@Mutation(() => Teller)
-	deleteTeller(@Arg('username', () => String) username: string) {
-		return Teller.delete({ username });
+	async deleteTeller(
+		@Arg('username', () => String) username: string
+	): Promise<DeleteResult> {
+		return await Teller.delete({ username });
 	}
 
 	@Mutation(() => Boolean)

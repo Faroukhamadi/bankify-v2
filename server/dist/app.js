@@ -23,7 +23,6 @@ const main = async () => {
         username: process.env.POSTGRES_USER || process.env.POSTGRES_USERNAME,
         password: process.env.POSTGRES_PASSWORD || process.env.POSTGRES_PASSWORD,
         logging: 'all',
-        synchronize: true,
         entities: [Customer_1.Customer, Account_1.Account, Teller_1.Teller, Transaction_1.Transaction],
     });
     await myDataSource.initialize();
@@ -136,6 +135,17 @@ const main = async () => {
                 ],
             });
             return;
+        }
+        const teller = await Teller_1.Teller.findOneBy({ id: tellerId });
+        if (!teller) {
+            res.json({
+                errors: [
+                    {
+                        message: `teller with specified id doesn't exist`,
+                        field: 'tellerId',
+                    },
+                ],
+            });
         }
         const account = customer === null || customer === void 0 ? void 0 : customer.accounts.find((a) => a['accountNumber'] === accountNumber);
         const transaction = Transaction_1.Transaction.create({

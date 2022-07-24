@@ -126,8 +126,8 @@ let TellerResolver = class TellerResolver {
     deleteTellers() {
         return Teller_1.Teller.delete({ id: (0, typeorm_1.In)([1, 3, 8]) });
     }
-    deleteTeller(username) {
-        return Teller_1.Teller.delete({ username });
+    async deleteTeller(username) {
+        return await Teller_1.Teller.delete({ username });
     }
     logout({ req, res }) {
         res.clearCookie(constants_1.COOKIE_NAME);
@@ -190,7 +190,7 @@ __decorate([
     __param(0, (0, type_graphql_1.Arg)('username', () => String)),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], TellerResolver.prototype, "deleteTeller", null);
 __decorate([
     (0, type_graphql_1.Mutation)(() => Boolean),

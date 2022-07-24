@@ -43,51 +43,6 @@ CredentialsResponse = __decorate([
     (0, type_graphql_1.ObjectType)()
 ], CredentialsResponse);
 let AccountResolver = class AccountResolver {
-    async createAccount(userId) {
-        const account = Account_1.Account.create({
-            accountNumber: '123456789123',
-        });
-        const customer = await Customer_1.Customer.findOne({
-            where: { id: userId },
-            loadRelationIds: true,
-        });
-        if (!customer) {
-            return {
-                errors: [
-                    {
-                        message: 'user not found',
-                    },
-                ],
-            };
-        }
-        if (account.customer) {
-            return {
-                errors: [
-                    {
-                        message: 'user already has an account',
-                    },
-                ],
-            };
-        }
-        try {
-            await account.save();
-        }
-        catch (error) {
-            return {
-                errors: [
-                    {
-                        message: 'I dont know what is causing this error',
-                    },
-                ],
-            };
-        }
-        account.customer;
-        await account.save();
-        return {
-            account,
-            customer,
-        };
-    }
     async balance(userId, {}) {
         const account = await Account_1.Account.findOne({
             where: {
@@ -111,12 +66,6 @@ let AccountResolver = class AccountResolver {
 };
 __decorate([
     (0, type_graphql_1.Mutation)(() => CredentialsResponse, { nullable: false }),
-    __param(0, (0, type_graphql_1.Arg)('userId', () => type_graphql_1.Int)),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number]),
-    __metadata("design:returntype", Promise)
-], AccountResolver.prototype, "createAccount", null);
-__decorate([
     (0, type_graphql_1.Query)(() => type_graphql_1.Int, { nullable: true }),
     __param(0, (0, type_graphql_1.Arg)('userId', () => type_graphql_1.Int)),
     __param(1, (0, type_graphql_1.Ctx)()),

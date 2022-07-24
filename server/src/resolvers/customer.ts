@@ -12,6 +12,7 @@ import {
 	Resolver,
 } from 'type-graphql';
 import { NAME_REGEX, NUMBER_REGEX } from '../constants';
+import { Account } from 'src/entities/Account';
 
 @ObjectType()
 class CustomerResponse {
@@ -44,6 +45,21 @@ export class CustomerResolver {
 		{ firstName, lastName, cin, phone, accountNumber }: CustomerInput,
 		@Ctx() {}: MyContext
 	): Promise<CustomerResponse> {
+		let intAccountNumber =
+			Math.floor(Math.random() * 999999999999) + 100000000000;
+		let account = await Account.findOneBy({
+			accountNumber: intAccountNumber.toString(),
+		});
+		while (account) {
+			intAccountNumber =
+				Math.floor(Math.random() * 999999999999) + 100000000000;
+			account = await Account.findOneBy({
+				accountNumber: intAccountNumber.toString(),
+			});
+		}
+
+		accountNumber = intAccountNumber.toString();
+
 		if (firstName.length <= 2) {
 			return {
 				errors: [
