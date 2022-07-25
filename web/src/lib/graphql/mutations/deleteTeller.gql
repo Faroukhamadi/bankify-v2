@@ -1,0 +1,13 @@
+mutation DeleteTeller($username: String!) {
+	deleteTeller(username: $username) {
+		errors {
+			field
+			message
+		}
+		teller {
+			id
+			username
+			role
+		}
+	}
+}

@@ -78,6 +78,55 @@ function KQL_CreateCustomerStore() {
  */
 export const KQL_CreateCustomer = KQL_CreateCustomerStore();
 
+function KQL_DeleteTellerStore() {
+	const operationName = 'KQL_DeleteTeller';
+	const operationType = ResponseResultType.Mutation;
+
+	// prettier-ignore
+	const { subscribe, set, update } = writable<RequestResult<Types.DeleteTellerMutation, Types.DeleteTellerMutationVariables>>({...defaultStoreValue, operationName, operationType});
+
+		async function mutateLocal(
+			params?: RequestParameters<Types.DeleteTellerMutationVariables>
+		): Promise<RequestResult<Types.DeleteTellerMutation, Types.DeleteTellerMutationVariables>> {
+			let { fetch, variables } = params ?? {};
+
+			const storedVariables = get(KQL_DeleteTeller).variables;
+			variables = variables ?? storedVariables;
+
+			update((c) => {
+				return { ...c, isFetching: true, status: RequestStatus.LOADING };
+			});
+
+			// prettier-ignore
+			const res = await kitQLClient.request<Types.DeleteTellerMutation, Types.DeleteTellerMutationVariables>({
+				skFetch: fetch,
+				document: Types.DeleteTellerDocument,
+				variables, 
+				operationName, 
+				operationType, 
+				browser
+			});
+			const result = { ...res, isFetching: false, status: RequestStatus.DONE, variables };
+			set(result);
+			return result;
+		}
+
+	return {
+		subscribe,
+
+		/**
+		 * Can be used for SSR, but simpler option is `.queryLoad`
+		 * @returns fill this store & the cache
+		 */
+		mutate: mutateLocal,
+
+	};
+}
+/**
+ * KitQL Svelte Store with the latest `DeleteTeller` Operation
+ */
+export const KQL_DeleteTeller = KQL_DeleteTellerStore();
+
 function KQL_LoginStore() {
 	const operationName = 'KQL_Login';
 	const operationType = ResponseResultType.Mutation;

@@ -9,7 +9,7 @@ import {
 	Query,
 	Resolver,
 } from 'type-graphql';
-import { DeleteResult, In } from 'typeorm';
+import { In } from 'typeorm';
 import { MyContext } from '../types';
 import argon2 from 'argon2';
 import { COOKIE_NAME } from '../constants';
@@ -143,11 +143,25 @@ export class TellerResolver {
 		return Teller.delete({ id: In([1, 3, 8]) });
 	}
 
-	@Mutation(() => Teller)
+	@Mutation(() => TellerResponse)
 	async deleteTeller(
 		@Arg('username', () => String) username: string
-	): Promise<DeleteResult> {
-		return await Teller.delete({ username });
+	): Promise<TellerResponse> {
+		const teller = await Teller.findOneBy({ username });
+		if (!teller) {
+			return {
+				errors: [
+					{
+						message: `teller with specified username doesn't exist`,
+						field: 'username',
+					},
+				],
+			};
+		}
+		await Teller.delete({ username });
+		return {
+			teller,
+		};
 	}
 
 	@Mutation(() => TellerResponse)

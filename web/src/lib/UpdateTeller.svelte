@@ -9,7 +9,6 @@
 	let roleField = { ...INPUT_FIELD };
 </script>
 
-<!-- TODO: implement updating role -->
 <h1>Update Teller</h1>
 <form
 	on:submit|preventDefault={async () => {

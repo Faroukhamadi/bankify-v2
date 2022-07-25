@@ -141,7 +141,21 @@ let TellerResolver = class TellerResolver {
         return Teller_1.Teller.delete({ id: (0, typeorm_1.In)([1, 3, 8]) });
     }
     async deleteTeller(username) {
-        return await Teller_1.Teller.delete({ username });
+        const teller = await Teller_1.Teller.findOneBy({ username });
+        if (!teller) {
+            return {
+                errors: [
+                    {
+                        message: `teller with specified username doesn't exist`,
+                        field: 'username',
+                    },
+                ],
+            };
+        }
+        await Teller_1.Teller.delete({ username });
+        return {
+            teller,
+        };
     }
     async updateTeller({ username, role }) {
         if (role.toLowerCase() !== 'customer' && role.toLowerCase() !== 'admin') {
@@ -234,7 +248,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], TellerResolver.prototype, "deleteTellers", null);
 __decorate([
-    (0, type_graphql_1.Mutation)(() => Teller_1.Teller),
+    (0, type_graphql_1.Mutation)(() => TellerResponse),
     __param(0, (0, type_graphql_1.Arg)('username', () => String)),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
