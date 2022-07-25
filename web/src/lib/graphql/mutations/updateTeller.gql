@@ -1,0 +1,13 @@
+mutation UpdateTeller($options: UpdateInput!) {
+	updateTeller(options: $options) {
+		errors {
+			field
+			message
+		}
+		teller {
+			id
+			username
+			role
+		}
+	}
+}

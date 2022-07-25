@@ -3,6 +3,7 @@ import {
 	Arg,
 	Ctx,
 	Field,
+	InputType,
 	Mutation,
 	ObjectType,
 	Query,
@@ -22,6 +23,14 @@ export class FieldError {
 
 	@Field()
 	message: string;
+}
+
+@InputType()
+export class UpdateInput {
+	@Field(() => String)
+	username: string;
+	@Field(() => String)
+	role: string;
 }
 
 @ObjectType()
@@ -139,6 +148,45 @@ export class TellerResolver {
 		@Arg('username', () => String) username: string
 	): Promise<DeleteResult> {
 		return await Teller.delete({ username });
+	}
+
+	@Mutation(() => TellerResponse)
+	async updateTeller(
+		@Arg('options') { username, role }: UpdateInput
+	): Promise<TellerResponse> {
+		if (role.toLowerCase() !== 'customer' && role.toLowerCase() !== 'admin') {
+			return {
+				errors: [
+					{
+						field: 'role',
+						message: 'Please enter a valid role',
+					},
+				],
+			};
+		}
+		// @ts-ignore
+		const updatedTeller = await Teller.createQueryBuilder()
+			.update({
+				role: role.toLowerCase(),
+			})
+			.where({
+				username,
+			})
+			.returning('*')
+			.execute();
+		if (!updatedTeller.raw[0]) {
+			return {
+				errors: [
+					{
+						message: `teller with specified username doesn't exist`,
+						field: 'username',
+					},
+				],
+			};
+		}
+		return {
+			teller: updatedTeller.raw[0],
+		};
 	}
 
 	@Mutation(() => Boolean)

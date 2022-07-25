@@ -15,7 +15,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.TellerResolver = exports.FieldError = void 0;
+exports.TellerResolver = exports.UpdateInput = exports.FieldError = void 0;
 const Teller_1 = require("../entities/Teller");
 const type_graphql_1 = require("type-graphql");
 const typeorm_1 = require("typeorm");
@@ -37,6 +37,20 @@ FieldError = __decorate([
     (0, type_graphql_1.ObjectType)()
 ], FieldError);
 exports.FieldError = FieldError;
+let UpdateInput = class UpdateInput {
+};
+__decorate([
+    (0, type_graphql_1.Field)(() => String),
+    __metadata("design:type", String)
+], UpdateInput.prototype, "username", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(() => String),
+    __metadata("design:type", String)
+], UpdateInput.prototype, "role", void 0);
+UpdateInput = __decorate([
+    (0, type_graphql_1.InputType)()
+], UpdateInput);
+exports.UpdateInput = UpdateInput;
 let TellerResponse = class TellerResponse {
 };
 __decorate([
@@ -129,6 +143,40 @@ let TellerResolver = class TellerResolver {
     async deleteTeller(username) {
         return await Teller_1.Teller.delete({ username });
     }
+    async updateTeller({ username, role }) {
+        if (role.toLowerCase() !== 'customer' && role.toLowerCase() !== 'admin') {
+            return {
+                errors: [
+                    {
+                        field: 'role',
+                        message: 'Please enter a valid role',
+                    },
+                ],
+            };
+        }
+        const updatedTeller = await Teller_1.Teller.createQueryBuilder()
+            .update({
+            role: role.toLowerCase(),
+        })
+            .where({
+            username,
+        })
+            .returning('*')
+            .execute();
+        if (!updatedTeller.raw[0]) {
+            return {
+                errors: [
+                    {
+                        message: `teller with specified username doesn't exist`,
+                        field: 'username',
+                    },
+                ],
+            };
+        }
+        return {
+            teller: updatedTeller.raw[0],
+        };
+    }
     logout({ req, res }) {
         res.clearCookie(constants_1.COOKIE_NAME);
         return new Promise((resolve) => req.session.destroy((err) => {
@@ -192,6 +240,13 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], TellerResolver.prototype, "deleteTeller", null);
+__decorate([
+    (0, type_graphql_1.Mutation)(() => TellerResponse),
+    __param(0, (0, type_graphql_1.Arg)('options')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [UpdateInput]),
+    __metadata("design:returntype", Promise)
+], TellerResolver.prototype, "updateTeller", null);
 __decorate([
     (0, type_graphql_1.Mutation)(() => Boolean),
     __param(0, (0, type_graphql_1.Ctx)()),

@@ -10,21 +10,18 @@
 	let lastNameField = { ...INPUT_FIELD };
 	let CINField = { ...INPUT_FIELD };
 	let phoneField = { ...INPUT_FIELD };
-	let accountNumberField = { ...INPUT_FIELD };
 	let fields: Field[] = [];
 </script>
 
 <h1>Register Customer</h1>
 <form
 	on:submit|preventDefault={async () => {
-		[firstNameField, lastNameField, CINField, phoneField, accountNumberField] = fields =
-			await registerCustomer(
-				firstNameField,
-				lastNameField,
-				CINField,
-				phoneField,
-				accountNumberField
-			);
+		[firstNameField, lastNameField, CINField, phoneField] = fields = await registerCustomer(
+			firstNameField,
+			lastNameField,
+			CINField,
+			phoneField
+		);
 		let allValid = true;
 		fields.forEach((field) => {
 			if (field.invalid) {
@@ -91,19 +88,6 @@
 			>{phoneField.errorText}</HelperText
 		>
 	{/if}
-	<Textfield
-		style="min-width: 30rem;"
-		variant="outlined"
-		bind:value={accountNumberField.content}
-		label="Account Number"
-		required
-		type="text"
-	/>
-	{#if accountNumberField.invalid}
-		<HelperText style="color: red; font-size: large;" validationMsg persistent slot="helper"
-			>{accountNumberField.errorText}</HelperText
-		>
-	{/if}
 	<Button style="min-width: 30rem;" variant="raised">CREATE CUSTOMER</Button>
 </form>
 
@@ -119,7 +103,6 @@
 	form {
 		display: flex;
 		flex-direction: column;
-		justify-content: center;
 		align-items: center;
 		gap: 30px;
 		height: 69vh;

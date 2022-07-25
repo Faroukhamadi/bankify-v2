@@ -225,6 +225,55 @@ function KQL_RegisterStore() {
  */
 export const KQL_Register = KQL_RegisterStore();
 
+function KQL_UpdateTellerStore() {
+	const operationName = 'KQL_UpdateTeller';
+	const operationType = ResponseResultType.Mutation;
+
+	// prettier-ignore
+	const { subscribe, set, update } = writable<RequestResult<Types.UpdateTellerMutation, Types.UpdateTellerMutationVariables>>({...defaultStoreValue, operationName, operationType});
+
+		async function mutateLocal(
+			params?: RequestParameters<Types.UpdateTellerMutationVariables>
+		): Promise<RequestResult<Types.UpdateTellerMutation, Types.UpdateTellerMutationVariables>> {
+			let { fetch, variables } = params ?? {};
+
+			const storedVariables = get(KQL_UpdateTeller).variables;
+			variables = variables ?? storedVariables;
+
+			update((c) => {
+				return { ...c, isFetching: true, status: RequestStatus.LOADING };
+			});
+
+			// prettier-ignore
+			const res = await kitQLClient.request<Types.UpdateTellerMutation, Types.UpdateTellerMutationVariables>({
+				skFetch: fetch,
+				document: Types.UpdateTellerDocument,
+				variables, 
+				operationName, 
+				operationType, 
+				browser
+			});
+			const result = { ...res, isFetching: false, status: RequestStatus.DONE, variables };
+			set(result);
+			return result;
+		}
+
+	return {
+		subscribe,
+
+		/**
+		 * Can be used for SSR, but simpler option is `.queryLoad`
+		 * @returns fill this store & the cache
+		 */
+		mutate: mutateLocal,
+
+	};
+}
+/**
+ * KitQL Svelte Store with the latest `UpdateTeller` Operation
+ */
+export const KQL_UpdateTeller = KQL_UpdateTellerStore();
+
 function KQL_CustomerStore() {
 	const operationName = 'KQL_Customer';
 	const operationType = ResponseResultType.Query;

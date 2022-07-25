@@ -12,7 +12,7 @@ import {
 	Resolver,
 } from 'type-graphql';
 import { NAME_REGEX, NUMBER_REGEX } from '../constants';
-import { Account } from 'src/entities/Account';
+import { Account } from '../entities/Account';
 
 @ObjectType()
 class CustomerResponse {
@@ -33,8 +33,6 @@ export class CustomerInput {
 	cin: string;
 	@Field()
 	phone: string;
-	@Field()
-	accountNumber: string;
 }
 
 @Resolver()
@@ -42,7 +40,7 @@ export class CustomerResolver {
 	@Mutation(() => CustomerResponse)
 	async createCustomer(
 		@Arg('options')
-		{ firstName, lastName, cin, phone, accountNumber }: CustomerInput,
+		{ firstName, lastName, cin, phone }: CustomerInput,
 		@Ctx() {}: MyContext
 	): Promise<CustomerResponse> {
 		let intAccountNumber =
@@ -58,7 +56,7 @@ export class CustomerResolver {
 			});
 		}
 
-		accountNumber = intAccountNumber.toString();
+		const accountNumber = intAccountNumber.toString();
 
 		if (firstName.length <= 2) {
 			return {

@@ -33,12 +33,25 @@
 	import { goto } from '$app/navigation';
 	import Transaction from '$lib/transactions/Transaction.svelte';
 	import CreateTeller from '$lib/CreateTeller.svelte';
+	import UpdateTeller from '$lib/UpdateTeller.svelte';
+	import DeleteTeller from '$lib/DeleteTeller.svelte';
 
-	type NavState = 'Search' | 'Register' | 'Transaction' | 'Create Teller';
+	type NavState =
+		| 'Search'
+		| 'Register'
+		| 'Transaction'
+		| 'Create Teller'
+		| 'Update Teller'
+		| 'Delete Teller';
 
 	export let role: 'CUSTOMER' | 'ADMIN';
+	let active: NavState;
 
-	let active: NavState = 'Search';
+	if (role === 'CUSTOMER') {
+		active = 'Search';
+	} else {
+		active = 'Create Teller';
+	}
 </script>
 
 <svelte:head>
@@ -49,7 +62,7 @@
 
 {#if role === 'ADMIN'}
 	<div>
-		<TabBar tabs={['Search', 'Register', 'Transaction', 'Create Teller']} let:tab bind:active>
+		<TabBar tabs={['Create Teller', 'Update Teller', 'Delete Teller']} let:tab bind:active>
 			<Tab {tab}>
 				<Label>{tab}</Label>
 			</Tab>
@@ -71,8 +84,12 @@
 	<Register />
 {:else if active === 'Transaction'}
 	<Transaction />
-{:else}
+{:else if active === 'Create Teller'}
 	<CreateTeller />
+{:else if active === 'Update Teller'}
+	<UpdateTeller />
+{:else}
+	<DeleteTeller />
 {/if}
 
 <div
