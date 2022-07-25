@@ -6,16 +6,13 @@
 	import CircularProgress from '@smui/circular-progress';
 	import type { TransactionResponse } from '../../../../server/src/types';
 	import { KQL_Me } from '$lib/graphql/_kitql/graphqlStores';
-	import type { SnackbarComponentDev } from '@smui/snackbar';
-	import Snackbar, { Label, Actions } from '@smui/snackbar';
-	import IconButton from '@smui/icon-button';
 
 	let CINField = { ...INPUT_FIELD };
 	let accountNumberField = { ...INPUT_FIELD };
 	let amountField = { ...INPUT_FIELD };
 	let JSONResponse: TransactionResponse;
-	let snackbarSuccess: SnackbarComponentDev;
 	let loading = false;
+	let showSuccess = false;
 </script>
 
 {#if !loading}
@@ -62,6 +59,8 @@
 				CINField.content = '';
 				accountNumberField.content = '';
 				amountField.content = '';
+				showSuccess = true;
+				setTimeout(() => (showSuccess = false), 5000);
 				setTimeout(() => (loading = false), 500);
 			} else {
 				loading = false;
@@ -108,22 +107,18 @@
 			>
 		{/if}
 		<Button style="min-width: 30rem;" variant="raised">Submit Operation</Button>
+		{#if showSuccess}
+			<div class="success-msg">
+				<i class="fa fa-check" />
+				Success - Banking operation completed
+			</div>
+		{/if}
 	</form>
 {:else}
 	<div style="display: flex; justify-content: center; align-content: center;">
 		<CircularProgress indeterminate style="height: 520px; width: 32px; " />
 	</div>
 {/if}
-<Button on:click={() => snackbarSuccess && snackbarSuccess.open()}>
-	<Label>Open Success Snackbar</Label>
-</Button>
-
-<Snackbar bind:this={snackbarSuccess} class="demo-success">
-	<Label>That thing you tried to do actually worked, if you can believe it!</Label>
-	<Actions>
-		<IconButton class="material-icons" title="Dismiss">close</IconButton>
-	</Actions>
-</Snackbar>
 
 <style>
 	h1 {
@@ -140,5 +135,16 @@
 		justify-content: center;
 		align-items: center;
 		gap: 30px;
+	}
+	.success-msg {
+		margin: 10px 0;
+		padding: 10px;
+		border-radius: 3px 3px 3px 3px;
+	}
+	.success-msg {
+		color: #270;
+		background-color: #dff2bf;
+		font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial;
+		font-weight: 300;
 	}
 </style>
