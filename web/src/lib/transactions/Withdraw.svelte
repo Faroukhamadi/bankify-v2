@@ -6,11 +6,15 @@
 	import CircularProgress from '@smui/circular-progress';
 	import type { TransactionResponse } from '../../../../server/src/types';
 	import { KQL_Me } from '$lib/graphql/_kitql/graphqlStores';
+	import type { SnackbarComponentDev } from '@smui/snackbar';
+	import Snackbar, { Label, Actions } from '@smui/snackbar';
+	import IconButton from '@smui/icon-button';
 
 	let CINField = { ...INPUT_FIELD };
 	let accountNumberField = { ...INPUT_FIELD };
 	let amountField = { ...INPUT_FIELD };
 	let JSONResponse: TransactionResponse;
+	let snackbarSuccess: SnackbarComponentDev;
 	let loading = false;
 </script>
 
@@ -110,6 +114,16 @@
 		<CircularProgress indeterminate style="height: 520px; width: 32px; " />
 	</div>
 {/if}
+<Button on:click={() => snackbarSuccess && snackbarSuccess.open()}>
+	<Label>Open Success Snackbar</Label>
+</Button>
+
+<Snackbar bind:this={snackbarSuccess} class="demo-success">
+	<Label>That thing you tried to do actually worked, if you can believe it!</Label>
+	<Actions>
+		<IconButton class="material-icons" title="Dismiss">close</IconButton>
+	</Actions>
+</Snackbar>
 
 <style>
 	h1 {

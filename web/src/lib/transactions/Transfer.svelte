@@ -20,6 +20,7 @@
 	<h1>Transfer</h1>
 	<form
 		on:submit|preventDefault={async () => {
+			loading = true;
 			const teller = await KQL_Me.query();
 			const response = await fetch('http://localhost:4001/transactions/transfer', {
 				method: 'POST',

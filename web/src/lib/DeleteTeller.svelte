@@ -38,7 +38,7 @@
 			>{usernameField.errorText}</HelperText
 		>
 	{/if}
-	<Button style="min-width: 30rem;" variant="raised">UPDATE TELLER</Button>
+	<Button style="min-width: 30rem;" variant="raised">DELETE TELLER</Button>
 </form>
 
 <style>
