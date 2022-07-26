@@ -158,7 +158,7 @@
 	</form>
 {:else}
 	<div style="display: flex; justify-content: center; align-content: center;">
-		<CircularProgress indeterminate style="height: 520px; width: 32px; " />
+		<CircularProgress indeterminate style="height: 520px; width: 32px;" />
 	</div>
 {/if}
 

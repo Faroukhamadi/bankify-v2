@@ -74,80 +74,86 @@
 
 <h1>Customer Information</h1>
 <div>
-	<List twoLine nonInteractive>
-		<Item>
-			<Text>
-				<PrimaryText style="font-size: x-large;">First Name</PrimaryText>
-				<SecondaryText style="font-size: large;"
-					>{res.data?.customer.customer?.firstName}</SecondaryText
-				>
-			</Text>
-		</Item>
-
-		<Item>
-			<Text>
-				<PrimaryText style="font-size: x-large;">Last Name</PrimaryText>
-				<SecondaryText style="font-size: large;"
-					>{res.data?.customer.customer?.lastName}</SecondaryText
-				>
-			</Text>
-		</Item>
-
-		<Item>
-			<Text>
-				<PrimaryText style="font-size: x-large;">CIN</PrimaryText>
-				<SecondaryText style="font-size: large;">{res.data?.customer.customer?.cin}</SecondaryText>
-			</Text>
-		</Item>
-
-		<Item>
-			<Text>
-				<PrimaryText style="font-size: x-large;">Phone</PrimaryText>
-				<SecondaryText style="font-size: large;">{res.data?.customer.customer?.phone}</SecondaryText
-				>
-			</Text>
-		</Item>
-
-		<Item>
-			<Text>
-				<PrimaryText style="font-size: x-large;">Balance</PrimaryText>
-				<SecondaryText style="font-size: large;"
-					>{res.data?.customer.customer?.accounts[0].balance} D.T</SecondaryText
-				>
-			</Text>
-		</Item>
-
-		<Item>
-			<Text>
-				<PrimaryText style="font-size: x-large;">Account Number</PrimaryText>
-				<SecondaryText style="font-size: large;"
-					>{res.data?.customer.customer?.accounts[0].accountNumber}</SecondaryText
-				>
-			</Text>
-		</Item>
-
-		<Item>
-			<Text>
-				<PrimaryText style="font-size: x-large;">Created At</PrimaryText>
-				<SecondaryText style="font-size: large;"
-					>{new Date(
-						parseInt(res.data?.customer.customer?.createdAt ?? '')
-					).toLocaleDateString()}</SecondaryText
-				>
-			</Text>
-		</Item>
-
-		<Item>
-			<Text>
-				<PrimaryText style="font-size: x-large;">Updated At</PrimaryText>
-				<SecondaryText style="font-size: large;"
-					>{new Date(
-						parseInt(res.data?.customer.customer?.updatedAt ?? '')
-					).toLocaleDateString()}</SecondaryText
-				>
-			</Text>
-		</Item>
-	</List>
+	<div class="info-container">
+		<div class="personal-info">
+			<h2>Personal Information</h2>
+			<List twoLine nonInteractive>
+				<Item>
+					<Text>
+						<PrimaryText style="font-size: x-large;">First Name</PrimaryText>
+						<SecondaryText style="font-size: large;"
+							>{res.data?.customer.customer?.firstName}</SecondaryText
+						>
+					</Text>
+				</Item>
+				<Item>
+					<Text>
+						<PrimaryText style="font-size: x-large;">Last Name</PrimaryText>
+						<SecondaryText style="font-size: large;"
+							>{res.data?.customer.customer?.lastName}</SecondaryText
+						>
+					</Text>
+				</Item>
+				<Item>
+					<Text>
+						<PrimaryText style="font-size: x-large;">CIN</PrimaryText>
+						<SecondaryText style="font-size: large;"
+							>{res.data?.customer.customer?.cin}</SecondaryText
+						>
+					</Text>
+				</Item>
+				<Item>
+					<Text>
+						<PrimaryText style="font-size: x-large;">Phone</PrimaryText>
+						<SecondaryText style="font-size: large;"
+							>{res.data?.customer.customer?.phone}</SecondaryText
+						>
+					</Text>
+				</Item>
+			</List>
+		</div>
+		<div class="account-info">
+			<h2>Account Information</h2>
+			<List twoLine nonInteractive>
+				<Item>
+					<Text>
+						<PrimaryText style="font-size: x-large;">Balance</PrimaryText>
+						<SecondaryText style="font-size: large;"
+							>{res.data?.customer.customer?.accounts[0].balance} D.T</SecondaryText
+						>
+					</Text>
+				</Item>
+				<Item>
+					<Text>
+						<PrimaryText style="font-size: x-large;">Account Number</PrimaryText>
+						<SecondaryText style="font-size: large;"
+							>{res.data?.customer.customer?.accounts[0].accountNumber}</SecondaryText
+						>
+					</Text>
+				</Item>
+				<Item>
+					<Text>
+						<PrimaryText style="font-size: x-large;">Created At</PrimaryText>
+						<SecondaryText style="font-size: large;"
+							>{new Date(
+								parseInt(res.data?.customer.customer?.createdAt ?? '')
+							).toLocaleDateString()}</SecondaryText
+						>
+					</Text>
+				</Item>
+				<Item>
+					<Text>
+						<PrimaryText style="font-size: x-large;">Updated At</PrimaryText>
+						<SecondaryText style="font-size: large;"
+							>{new Date(
+								parseInt(res.data?.customer.customer?.updatedAt ?? '')
+							).toLocaleDateString()}</SecondaryText
+						>
+					</Text>
+				</Item>
+			</List>
+		</div>
+	</div>
 	<h2>Customer Transactions</h2>
 	<DataTable table$aria-label="Todo list" style="width: 100%;">
 		<Head>
@@ -272,5 +278,9 @@
 	}
 	* {
 		cursor: default;
+	}
+	.info-container {
+		display: flex;
+		gap: 20%;
 	}
 </style>

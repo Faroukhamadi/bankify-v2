@@ -4,27 +4,43 @@
 	import HelperText from '@smui/textfield/helper-text';
 	import { INPUT_FIELD } from '$lib/constants';
 	import { KQL_DeleteTeller } from './graphql/_kitql/graphqlStores';
+	import Dialog, { Title, Content, Actions } from '@smui/dialog';
+	import { Label } from '@smui/button';
 
 	let usernameField = { ...INPUT_FIELD };
+	let open = false;
 </script>
 
-<!-- TODO: implement deleting role -->
+<Dialog bind:open aria-labelledby="simple-title" aria-describedby="simple-content">
+	<Title id="simple-title">Confirm Delete</Title>
+	<Content id="simple-content">Are you sure you want to delete {usernameField.content}</Content>
+	<Actions>
+		<Button on:click={() => {}}>
+			<Label>No</Label>
+		</Button>
+		<Button
+			on:click={async () => {
+				const res = await KQL_DeleteTeller.mutate({
+					variables: { username: usernameField.content }
+				});
+				if (
+					res.data?.deleteTeller.errors &&
+					res.data?.deleteTeller.errors[0].field === 'username'
+				) {
+					usernameField.invalid = true;
+					usernameField.errorText = res.data.deleteTeller.errors[0].message;
+				} else {
+					usernameField.invalid = false;
+					usernameField.content = '';
+				}
+			}}
+		>
+			<Label>Yes</Label>
+		</Button>
+	</Actions>
+</Dialog>
 <h1>Delete Teller</h1>
-<form
-	on:submit|preventDefault={async () => {
-		const res = await KQL_DeleteTeller.mutate({
-			variables: {
-				username: usernameField.content
-			}
-		});
-		if (res.data?.deleteTeller.errors && res.data?.deleteTeller.errors[0].field === 'username') {
-			usernameField.invalid = true;
-			usernameField.errorText = res.data.deleteTeller.errors[0].message;
-		} else {
-			usernameField.invalid = false;
-		}
-	}}
->
+<form on:submit|preventDefault={() => (open = true)}>
 	<Textfield
 		style="min-width: 30rem;"
 		variant="outlined"

@@ -29,6 +29,7 @@
 		"@smui/button": "^6.0.0-beta.16",
 		"@smui/circular-progress": "^6.0.0-beta.16",
 		"@smui/data-table": "^6.0.0-beta.16",
+		"@smui/dialog": "^6.0.0",
 		"@smui/drawer": "^6.0.0-beta.16",
 		"@smui/fab": "^6.0.0-beta.16",
 		"@smui/icon-button": "^6.0.0-beta.16",
