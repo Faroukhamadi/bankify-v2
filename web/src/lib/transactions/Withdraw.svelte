@@ -30,7 +30,7 @@
 				body: JSON.stringify({
 					cin: CINField.content,
 					accountNumber: accountNumberField.content,
-					amount: parseInt(amountField.content),
+					amount: amountField.content,
 					tellerId: teller.data?.me?.id
 				})
 			});

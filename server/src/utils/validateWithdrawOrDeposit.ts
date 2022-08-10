@@ -47,6 +47,7 @@ export const validateWithdrawOrDeposit = ({
 		};
 	}
 	if (amount <= 0) {
+		console.log('why am I inside this if statement', amount);
 		return {
 			errors: [
 				{

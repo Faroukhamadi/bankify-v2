@@ -19,7 +19,6 @@
 
 <script lang="ts">
 	import Login from '$lib/Login.svelte';
-	console.log('hello');
 </script>
 
 <svelte:head>

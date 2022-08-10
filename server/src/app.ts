@@ -21,6 +21,7 @@ interface PrevOrNext {
 	page: number;
 	limit: number;
 }
+
 interface PaginatedData {
 	results: Array<Transaction>;
 	next?: PrevOrNext;
@@ -66,6 +67,7 @@ const main = async () => {
 			req: Request<{}, {}, WithdrawOrDepositInput>,
 			res: Response<TransactionResponse>
 		) => {
+			console.log('this is body', req.body);
 			const errors = validateWithdrawOrDeposit(req.body);
 			if (errors) {
 				res.json(errors);
