@@ -8,6 +8,9 @@
     "dev": "nodemon dist/index.js",
     "prod": "node dist/index.js",
     "start-service-transaction-dev": "nodemon dist/app.js",
+    "start-service-withdraw-dev": "nodemon dist/withdrawMs.js",
+    "start-service-deposit-dev": "nodemon dist/depositMs.js",
+    "start-service-transfer-dev": "nodemon dist/transferMs.js",
     "start-service-transaction": "node dist/app.js",
     "start": "npm run start-service-transaction & npm run prod"
   },

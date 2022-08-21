@@ -8,7 +8,9 @@
 	import { KQL_Me } from '$lib/graphql/_kitql/graphqlStores';
 
 	let CINField = { ...INPUT_FIELD };
+	CINField.content = '14772345';
 	let accountNumberField = { ...INPUT_FIELD };
+	accountNumberField.content = '123456789123';
 	let amountField = { ...INPUT_FIELD };
 	let JSONResponse: TransactionResponse;
 	let loading = false;
@@ -21,7 +23,7 @@
 		on:submit|preventDefault={async () => {
 			loading = true;
 			const teller = await KQL_Me.query();
-			const response = await fetch('http://localhost:4001/transactions/withdraw', {
+			const response = await fetch('http://localhost:4002/transactions/withdraw', {
 				method: 'POST',
 				mode: 'cors',
 				headers: {

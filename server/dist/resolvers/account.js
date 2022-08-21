@@ -13,35 +13,8 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AccountResolver = void 0;
-const Customer_1 = require("../entities/Customer");
 const type_graphql_1 = require("type-graphql");
 const Account_1 = require("../entities/Account");
-let Error = class Error {
-};
-__decorate([
-    (0, type_graphql_1.Field)(),
-    __metadata("design:type", String)
-], Error.prototype, "message", void 0);
-Error = __decorate([
-    (0, type_graphql_1.ObjectType)()
-], Error);
-let CredentialsResponse = class CredentialsResponse {
-};
-__decorate([
-    (0, type_graphql_1.Field)(() => Customer_1.Customer, { nullable: true }),
-    __metadata("design:type", Customer_1.Customer)
-], CredentialsResponse.prototype, "customer", void 0);
-__decorate([
-    (0, type_graphql_1.Field)(() => Account_1.Account, { nullable: true }),
-    __metadata("design:type", Account_1.Account)
-], CredentialsResponse.prototype, "account", void 0);
-__decorate([
-    (0, type_graphql_1.Field)(() => [Error], { nullable: true }),
-    __metadata("design:type", Array)
-], CredentialsResponse.prototype, "errors", void 0);
-CredentialsResponse = __decorate([
-    (0, type_graphql_1.ObjectType)()
-], CredentialsResponse);
 let AccountResolver = class AccountResolver {
     async balance(userId, {}) {
         const account = await Account_1.Account.findOne({
@@ -65,7 +38,6 @@ let AccountResolver = class AccountResolver {
     }
 };
 __decorate([
-    (0, type_graphql_1.Mutation)(() => CredentialsResponse, { nullable: false }),
     (0, type_graphql_1.Query)(() => type_graphql_1.Int, { nullable: true }),
     __param(0, (0, type_graphql_1.Arg)('userId', () => type_graphql_1.Int)),
     __param(1, (0, type_graphql_1.Ctx)()),
