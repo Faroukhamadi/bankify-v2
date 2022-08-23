@@ -12,7 +12,7 @@
     "start-service-deposit-dev": "nodemon dist/depositMs.js",
     "start-service-transfer-dev": "nodemon dist/transferMs.js",
     "start-service-transaction": "node dist/app.js",
-    "start": "npm run start-service-transaction & npm run prod"
+    "start": "npm run dev & npm run start-service-transaction-dev & npm run start-service-withdraw-dev & npm run start-service-deposit-dev & npm run start-service-transfer-dev"
   },
   "keywords": [],
   "author": "",

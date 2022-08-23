@@ -31,6 +31,9 @@ services:
     ports:
       - "4000:4000"
       - "4001:4001"
+      - "4002:4002"
+      - "4003:4003"
+      - "4004:4004"
     volumes:
       - ./server:/usr/src/app/
       - /usr/src/app/node_modules
