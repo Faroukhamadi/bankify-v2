@@ -8,11 +8,16 @@
     "dev": "nodemon dist/index.js",
     "prod": "node dist/index.js",
     "start-service-transaction-dev": "nodemon dist/app.js",
+    "start-service-transaction-prod": "node dist/app.js",
     "start-service-withdraw-dev": "nodemon dist/withdrawMs.js",
+    "start-service-withdraw-prod": "node dist/withdrawMs.js",
     "start-service-deposit-dev": "nodemon dist/depositMs.js",
+    "start-service-deposit-prod": "node dist/depositMs.js",
     "start-service-transfer-dev": "nodemon dist/transferMs.js",
+    "start-service-transfer-prod": "node dist/transferMs.js",
     "start-service-transaction": "node dist/app.js",
-    "start": "npm run dev & npm run start-service-transaction-dev & npm run start-service-withdraw-dev & npm run start-service-deposit-dev & npm run start-service-transfer-dev"
+    "start": "npm run dev & npm run start-service-transaction-dev & npm run start-service-withdraw-dev & npm run start-service-deposit-dev & npm run start-service-transfer-dev",
+    "actual-start": "npm run prod & npm run start-service-transaction-prod & npm run start-service-withdraw-prod & npm run start-service-deposit-prod & npm run start-service-transfer-prod"
   },
   "keywords": [],
   "author": "",
