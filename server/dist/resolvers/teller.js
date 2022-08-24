@@ -75,8 +75,12 @@ let TellerResolver = class TellerResolver {
         return teller;
     }
     async register(options, { req }) {
+        console.log('------------inside register------------mhmmm');
+        console.log('ayeeeeeeeeeeee');
+        console.log('these are options: ', options);
         const errors = (0, validateRegister_1.validateRegister)(options);
         if (errors) {
+            console.log('we have errors: ', errors);
             return { errors };
         }
         const hashedPassword = await argon2_1.default.hash(options.password);
@@ -85,7 +89,10 @@ let TellerResolver = class TellerResolver {
             password: hashedPassword,
         });
         try {
+            console.log('e');
+            console.log('looks like we cant save');
             await teller.save();
+            console.log('looks like we can save');
         }
         catch (err) {
             if (err.code === '23505') {
@@ -99,6 +106,7 @@ let TellerResolver = class TellerResolver {
                 };
             }
         }
+        console.log('sadly cant touch session');
         req.session.tellerId = teller.id;
         return { teller };
     }
@@ -126,11 +134,13 @@ let TellerResolver = class TellerResolver {
             };
         }
         req.session.tellerId = teller.id;
+        console.log('reached the end and returning teller: ', teller);
         return {
             teller,
         };
     }
     async Tellers({}) {
+        console.log('hey');
         const tellers = await Teller_1.Teller.find();
         return tellers;
     }

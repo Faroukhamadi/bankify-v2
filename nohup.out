@@ -1,0 +1,7 @@
+37781:C 24 Aug 2022 15:12:31.086 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+37781:C 24 Aug 2022 15:12:31.086 # Redis version=7.0.2, bits=64, commit=00000000, modified=0, pid=37781, just started
+37781:C 24 Aug 2022 15:12:31.086 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf
+37781:M 24 Aug 2022 15:12:31.086 * monotonic clock: POSIX clock_gettime
+37781:M 24 Aug 2022 15:12:31.087 * Running mode=standalone, port=6379.
+37781:M 24 Aug 2022 15:12:31.087 # Server initialized
+37781:M 24 Aug 2022 15:12:31.089 * Ready to accept connections

@@ -22,6 +22,7 @@ const main = async () => {
         username: process.env.POSTGRES_USER || process.env.POSTGRES_USERNAME,
         password: process.env.POSTGRES_PASSWORD || process.env.POSTGRES_PASSWORD,
         logging: 'all',
+        synchronize: true,
         entities: [Customer_1.Customer, Account_1.Account, Teller_1.Teller, Transaction_1.Transaction],
     });
     await myDataSource.initialize();
