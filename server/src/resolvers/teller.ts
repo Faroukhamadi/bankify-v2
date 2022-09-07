@@ -62,12 +62,7 @@ export class TellerResolver {
 		@Arg('options') options: UsernamePasswordInput,
 		@Ctx() { req }: MyContext
 	): Promise<TellerResponse> {
-		console.log('------------inside register------------mhmmm');
-		console.log('ayeeeeeeeeeeee');
-		console.log('these are options: ', options);
-
 		const errors = validateRegister(options);
-		console.log('we are past validate register');
 
 		if (errors) {
 			console.log('we have errors: ', errors);
@@ -78,11 +73,9 @@ export class TellerResolver {
 			username: options.username,
 			password: hashedPassword,
 		});
+
 		try {
-			console.log('e');
-			console.log('looks like we cant save');
 			await teller.save();
-			console.log('looks like we can save');
 		} catch (err) {
 			if (err.code === '23505') {
 				return {
@@ -95,8 +88,6 @@ export class TellerResolver {
 				};
 			}
 		}
-		console.log('sadly cant touch session');
-
 		req.session.tellerId = teller.id;
 		return { teller };
 	}

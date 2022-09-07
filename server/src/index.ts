@@ -13,7 +13,6 @@ import { COOKIE_NAME, DEV_ORIGIN } from './constants';
 import { Customer } from './entities/Customer';
 import { Account } from './entities/Account';
 import { Teller } from './entities/Teller';
-import { HelloResolver } from './resolvers/hello';
 import { Transaction } from './entities/Transaction';
 import { TellerResolver } from './resolvers/teller';
 import { CustomerResolver } from './resolvers/customer';
@@ -77,12 +76,7 @@ const main = async () => {
 	const apolloServer = new ApolloServer({
 		plugins: [ApolloServerPluginLandingPageGraphQLPlayground()],
 		schema: await buildSchema({
-			resolvers: [
-				HelloResolver,
-				TellerResolver,
-				CustomerResolver,
-				AccountResolver,
-			],
+			resolvers: [TellerResolver, CustomerResolver, AccountResolver],
 			validate: false,
 		}),
 		context: ({ req, res }): MyContext => ({

@@ -75,9 +75,6 @@ let TellerResolver = class TellerResolver {
         return teller;
     }
     async register(options, { req }) {
-        console.log('------------inside register------------mhmmm');
-        console.log('ayeeeeeeeeeeee');
-        console.log('these are options: ', options);
         const errors = (0, validateRegister_1.validateRegister)(options);
         if (errors) {
             console.log('we have errors: ', errors);
@@ -89,10 +86,7 @@ let TellerResolver = class TellerResolver {
             password: hashedPassword,
         });
         try {
-            console.log('e');
-            console.log('looks like we cant save');
             await teller.save();
-            console.log('looks like we can save');
         }
         catch (err) {
             if (err.code === '23505') {
@@ -106,7 +100,6 @@ let TellerResolver = class TellerResolver {
                 };
             }
         }
-        console.log('sadly cant touch session');
         req.session.tellerId = teller.id;
         return { teller };
     }

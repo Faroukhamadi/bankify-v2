@@ -17,7 +17,6 @@ const constants_1 = require("./constants");
 const Customer_1 = require("./entities/Customer");
 const Account_1 = require("./entities/Account");
 const Teller_1 = require("./entities/Teller");
-const hello_1 = require("./resolvers/hello");
 const Transaction_1 = require("./entities/Transaction");
 const teller_1 = require("./resolvers/teller");
 const customer_1 = require("./resolvers/customer");
@@ -65,12 +64,7 @@ const main = async () => {
     const apolloServer = new apollo_server_express_1.ApolloServer({
         plugins: [(0, apollo_server_core_1.ApolloServerPluginLandingPageGraphQLPlayground)()],
         schema: await (0, type_graphql_1.buildSchema)({
-            resolvers: [
-                hello_1.HelloResolver,
-                teller_1.TellerResolver,
-                customer_1.CustomerResolver,
-                account_1.AccountResolver,
-            ],
+            resolvers: [teller_1.TellerResolver, customer_1.CustomerResolver, account_1.AccountResolver],
             validate: false,
         }),
         context: ({ req, res }) => ({
